@@ -1,14 +1,16 @@
+import { InvitationCode } from "@/types/isValidInvitationCode";
+import { UserId } from "@/types/isValidUserId";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface UserState {
-  id: string;
-  invitationCode: string;
+  id: UserId | null;
+  invitationCode: InvitationCode | null;
   nickname: string;
 }
 
 const initialState: UserState = {
-  id: "",
-  invitationCode: "",
+  id: null,
+  invitationCode: null,
   nickname: "",
 };
 
@@ -16,13 +18,13 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUserId: (state, { payload }) => {
+    setUserId: (state, { payload }: {payload: UserId | null}) => {
       state.id = payload;
     },
-    setNickname: (state, { payload }) => {
+    setNickname: (state, { payload }: {payload: string}) => {
       state.nickname = payload;
     },
-    enterRoomByInvitationCode: (state, { payload }) => {
+    enterRoomByInvitationCode: (state, { payload }: {payload: InvitationCode | null}) => {
       state.invitationCode = payload;
     },
   },

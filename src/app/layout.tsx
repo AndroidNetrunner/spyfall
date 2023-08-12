@@ -1,30 +1,30 @@
-"use client";
+'use client';
 
-import "./globals.css";
-import { Inter } from "next/font/google";
-import Providers from "../components/Providers";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import './globals.css';
+import { Inter } from 'next/font/google';
+import { Provider } from 'react-redux';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { store } from '../redux/store';
+import { CssBaseline } from '@mui/material';
 const darkTheme = createTheme({
   palette: {
-    mode: "dark",
+    mode: 'dark',
   },
 });
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <html lang="ko">
-        <body className={inter.className}>
-          <Providers>{children}</Providers>
-        </body>
-      </html>
-    </ThemeProvider>
+    <>
+      <CssBaseline />
+      <ThemeProvider theme={darkTheme}>
+        <html lang="ko">
+          <body className={inter.className}>
+            <Provider store={store}>{children}</Provider>
+          </body>
+        </html>
+      </ThemeProvider>
+    </>
   );
 }
