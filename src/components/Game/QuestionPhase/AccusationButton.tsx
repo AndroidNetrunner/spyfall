@@ -16,7 +16,7 @@ export default function AccusationButton({ setCanAccuse }: { setCanAccuse: Dispa
   const { handleAccuse } = useCreateHandler();
 
   return (
-    <Box display="grid" alignItems="center" justifyContent="center" component="form">
+    <Box alignItems="center" justifyContent="center" component="form">
       {availablePlayers && (
         <Autocomplete
           onChange={(e, newValue) => {
@@ -46,16 +46,18 @@ export default function AccusationButton({ setCanAccuse }: { setCanAccuse: Dispa
           getOptionLabel={option => option.value}
         />
       )}
-      <Button
-        color="error"
-        disabled={!selectedPlayer}
-        variant="outlined"
-        onClick={() => {
-          void handleAccuse(invitationCode, myUserId, selectedPlayer as UserId);
-          setCanAccuse(false);
-        }}>
-        고발하기
-      </Button>
+      <Box display="grid">
+        <Button
+          color="error"
+          disabled={!selectedPlayer}
+          variant="outlined"
+          onClick={() => {
+            void handleAccuse(invitationCode, myUserId, selectedPlayer as UserId);
+            setCanAccuse(false);
+          }}>
+          고발하기
+        </Button>
+      </Box>
     </Box>
   );
 }

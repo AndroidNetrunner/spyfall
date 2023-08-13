@@ -13,7 +13,7 @@ export default function GuessingPlaceButton() {
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음.');
   // TODO: 모바일에서 TextField의 너비 수정 필요
   return (
-    <Box display="grid" alignItems="center" justifyContent="center" component="form">
+    <Box alignItems="center" justifyContent="center" component="form">
       {availablePlaces && (
         <Autocomplete
           value={selectedPlace}
@@ -40,13 +40,15 @@ export default function GuessingPlaceButton() {
           options={availablePlaces}
         />
       )}
-      <Button
-        disabled={!selectedPlace}
-        variant="outlined"
-        onClick={() => void handleGuess(invitationCode, selectedPlace as Place)}>
-        {' '}
-        장소 맞히기
-      </Button>
+      <Box display="grid" justifyContent="center">
+        <Button
+          disabled={!selectedPlace}
+          variant="outlined"
+          onClick={() => void handleGuess(invitationCode, selectedPlace as Place)}>
+          {' '}
+          장소 맞히기
+        </Button>
+      </Box>
     </Box>
   );
 }
