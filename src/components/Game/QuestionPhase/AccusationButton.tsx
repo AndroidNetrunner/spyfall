@@ -3,10 +3,10 @@ import { selectPlayers } from '@/redux/slices/gameSlice';
 import { selectId, selectUser } from '@/redux/slices/userSlice';
 import { UserId } from '@/types/isValidUserId';
 import { Autocomplete, Box, Button, TextField } from '@mui/material';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-export default function AccusationButton() {
+export default function AccusationButton({ setCanAccuse }: { setCanAccuse: Dispatch<SetStateAction<boolean>> }) {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null | undefined>(null);
   const myUserId = useSelector(selectId);
   if (!myUserId) throw new Error('유저 id가 존재하지 않음.');
@@ -14,6 +14,7 @@ export default function AccusationButton() {
   const { invitationCode } = useSelector(selectUser);
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음.');
   const { handleAccuse } = useCreateHandler();
+
   return (
     <Box display="grid" alignItems="center" justifyContent="center" component="form">
       {availablePlayers && (
@@ -49,7 +50,10 @@ export default function AccusationButton() {
         color="error"
         disabled={!selectedPlayer}
         variant="outlined"
-        onClick={() => void handleAccuse(invitationCode, myUserId, selectedPlayer as UserId)}>
+        onClick={() => {
+          void handleAccuse(invitationCode, myUserId, selectedPlayer as UserId);
+          setCanAccuse(false);
+        }}>
         고발하기
       </Button>
     </Box>

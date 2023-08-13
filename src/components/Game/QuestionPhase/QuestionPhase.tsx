@@ -15,13 +15,14 @@ export default function QuestionPhase() {
   const spy = useSelector(selectSpy);
   const myUserId = useSelector(selectId);
   const [openedSnackbar, setOpenedSnackbar] = useState(false);
+  const [canAccuse, setCanAccuse] = useState(true);
   return (
     <Box>
       {nominator ? (
         <VoteForAccuse setOpenedSnackbar={setOpenedSnackbar} />
       ) : (
         <>
-          <AccusationButton />
+          {canAccuse && <AccusationButton setCanAccuse={setCanAccuse} />}
           <Timer />
         </>
       )}

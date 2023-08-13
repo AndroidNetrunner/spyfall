@@ -5,8 +5,6 @@ import { UserId } from '@/types/isValidUserId';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { useSelector } from 'react-redux';
 
-// TODO: 처음으로 돌아가기 버튼 구현
-
 export default function FinalVoteTable() {
   const players = useSelector(selectPlayers);
   const finalVotes = useSelector(selectFinalVotes);
