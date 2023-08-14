@@ -19,6 +19,7 @@ if (!process.env.NEXT_PUBLIC_FIREBASE_CONFIG) {
 const firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG) as FirebaseConfig;
 
 const app = initializeApp(firebaseConfig);
-getAnalytics(app);
+if (typeof window !== 'undefined')
+  getAnalytics(app);
 const db = getFirestore(app);
 export default db;
