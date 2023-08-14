@@ -11,7 +11,7 @@ export default function GuessingPlaceButton() {
   const { handleGuess } = useCreateHandler();
   const invitationCode = useSelector(selectInvitationCode);
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음.');
-  // TODO: 모바일에서 TextField의 너비 수정 필요
+
   return (
     <Box alignItems="center" justifyContent="center" component="form">
       {availablePlaces && (
