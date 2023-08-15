@@ -2,7 +2,7 @@ import { Alert, Box, Snackbar } from '@mui/material';
 import Timer from './Timer';
 import AccusationButton from './AccusationButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectNominator, setTimer } from '@/redux/slices/questionPhaseSlice';
+import { selectNominator, selectVotes, setTimer } from '@/redux/slices/questionPhaseSlice';
 import VoteForAccuse from './VoteForAccuse';
 import { selectSpy } from '@/redux/slices/gameSlice';
 import { selectId } from '@/redux/slices/userSlice';
@@ -17,13 +17,18 @@ export default function QuestionPhase() {
   const dispatch = useDispatch();
   const [openedSnackbar, setOpenedSnackbar] = useState(false);
   const [canAccuse, setCanAccuse] = useState(true);
+  const votes = useSelector(selectVotes);
   useEffect(() => {
     dispatch(setTimer(8 * 60));
   }, []);
+  useEffect(() => {
+    const readVotes = Object.values(votes);
+    if (readVotes.every(vote => vote !== null) && readVotes.some(vote => vote === false)) setOpenedSnackbar(true);
+  }, [votes]);
   return (
     <Box>
       {nominator ? (
-        <VoteForAccuse setOpenedSnackbar={setOpenedSnackbar} />
+        <VoteForAccuse />
       ) : (
         <>
           {canAccuse && <AccusationButton setCanAccuse={setCanAccuse} />}

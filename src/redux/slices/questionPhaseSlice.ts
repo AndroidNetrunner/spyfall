@@ -27,7 +27,7 @@ const QuestionPhaseSlice = createSlice({
             state.votes = {}
         },
         resetQuestionPhase: () => initialState,
-        setvotes: (state, {payload} : {payload: Vote} ) => {
+        setVotes: (state, {payload} : {payload: Vote} ) => {
             state.votes = payload;
         }, 
         setNominee: (state, {payload}: {payload: UserId | null}) => {
@@ -45,7 +45,7 @@ const QuestionPhaseSlice = createSlice({
     }
 })
 
-export const { resetVote, setvotes, setQuestionPhase, resetQuestionPhase, setTimer, setNominator, setNominee } = QuestionPhaseSlice.actions;
+export const { resetVote, setVotes, setQuestionPhase, resetQuestionPhase, setTimer, setNominator, setNominee } = QuestionPhaseSlice.actions;
 
 export const selectNominator = (state: { questionPhase: QuestionPhase }) => state.questionPhase.nominator;
 export const selectNominee = (state: { questionPhase: QuestionPhase }) => state.questionPhase.nominee;

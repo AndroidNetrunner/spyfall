@@ -8,7 +8,7 @@ import { selectUser } from '@/redux/slices/userSlice';
 import RoleInfo from './RoleInfo';
 import QuestionPhase from './QuestionPhase/QuestionPhase';
 import VotePhase from './VotePhase';
-import { selectTimer, setNominator, setNominee, setvotes } from '@/redux/slices/questionPhaseSlice';
+import { selectTimer, setNominator, setNominee, setVotes } from '@/redux/slices/questionPhaseSlice';
 import { UserId } from '@/types/isValidUserId';
 import { Vote } from '@/types/Vote';
 import { setFinalVotes } from '@/redux/slices/votePhaseSlice';
@@ -27,7 +27,7 @@ export default function Game() {
       const currentData = snapshot.data();
       if (typeof currentData === 'object') dispatch(setGame(currentData as GameState));
       if (typeof currentData === 'object' && typeof currentData.votes === 'object') {
-        dispatch(setvotes(currentData.votes as Vote));
+        dispatch(setVotes(currentData.votes as Vote));
         dispatch(setNominee(currentData.nominee as UserId | null));
         dispatch(setNominator(currentData.nominator as UserId | null));
       }

@@ -1,13 +1,13 @@
 import useCreateHandler from '@/hooks/useCreateHandler';
 import { selectInvitationCode, selectPlayers, selectSpy } from '@/redux/slices/gameSlice';
-import { selectNominator, selectNominee, selectVotes } from '@/redux/slices/questionPhaseSlice';
+import { selectNominator, selectNominee } from '@/redux/slices/questionPhaseSlice';
 import { selectId } from '@/redux/slices/userSlice';
 import { UserId } from '@/types/isValidUserId';
 import { Alert, AlertTitle, Box, Button } from '@mui/material';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-export default function VoteForAccuse({ setOpenedSnackbar }: { setOpenedSnackbar: Dispatch<SetStateAction<boolean>> }) {
+export default function VoteForAccuse() {
   const players = useSelector(selectPlayers);
   const nomineeId = useSelector(selectNominee);
   const nominatorId = useSelector(selectNominator);
@@ -15,17 +15,12 @@ export default function VoteForAccuse({ setOpenedSnackbar }: { setOpenedSnackbar
   const spy = useSelector(selectSpy);
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');
   const myUserId = useSelector(selectId);
-  const votes = useSelector(selectVotes);
+
   if (!myUserId) throw new Error('유저 id가 존재하지 않음');
   const nominee = players.find(player => player.id === nomineeId);
   const nominator = players.find(player => player.id === nominatorId);
   const { handleVote } = useCreateHandler();
   const [hasVote, setHasVote] = useState(nomineeId !== myUserId);
-  useEffect(() => {
-    return () => {
-      if (Object.values(votes).some(vote => vote === false)) setOpenedSnackbar(true);
-    };
-  });
   return (
     <Box sx={{ mt: 3 }}>
       <Alert severity="warning">
