@@ -1,21 +1,25 @@
 import { Alert, Box, Snackbar } from '@mui/material';
 import Timer from './Timer';
 import AccusationButton from './AccusationButton';
-import { useSelector } from 'react-redux';
-import { selectNominator } from '@/redux/slices/questionPhaseSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectNominator, setTimer } from '@/redux/slices/questionPhaseSlice';
 import VoteForAccuse from './VoteForAccuse';
 import { selectSpy } from '@/redux/slices/gameSlice';
 import { selectId } from '@/redux/slices/userSlice';
 import GuessingPlaceButton from './GuessingPlaceButton';
 import AvailablePlaces from './AvailablePlaces';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function QuestionPhase() {
   const nominator = useSelector(selectNominator);
   const spy = useSelector(selectSpy);
   const myUserId = useSelector(selectId);
+  const dispatch = useDispatch();
   const [openedSnackbar, setOpenedSnackbar] = useState(false);
   const [canAccuse, setCanAccuse] = useState(true);
+  useEffect(() => {
+    dispatch(setTimer(8 * 60));
+  }, []);
   return (
     <Box>
       {nominator ? (
