@@ -29,8 +29,10 @@ export default function VoteForAccuse() {
       </Alert>
       {hasVote && (
         <>
-          {nominee?.nickname}님은 스파이인가요?
-          <Box display="flex">
+          <Box display="flex" justifyContent="center">
+            {nominee?.nickname}님은 스파이인가요?
+          </Box>
+          <Box display="flex" justifyContent="center">
             <Button
               variant="outlined"
               color="success"
