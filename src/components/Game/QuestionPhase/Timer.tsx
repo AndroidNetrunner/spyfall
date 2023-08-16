@@ -1,5 +1,6 @@
 import useInterval from '@/hooks/useInterval';
 import { selectTimer, setTimer } from '@/redux/slices/questionPhaseSlice';
+import { Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function Timer() {
@@ -14,8 +15,8 @@ export default function Timer() {
   const seconds = timer % 60;
 
   return (
-    <div>
+    <Box display="flex" justifyContent="center">
       남은 시간: {minutes}분 {seconds}초
-    </div>
+    </Box>
   );
 }

@@ -15,7 +15,7 @@ export default function AccusationButton({ setCanAccuse }: { setCanAccuse: Dispa
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음.');
   const { handleAccuse } = useCreateHandler();
   return (
-    <Box alignItems="center" justifyContent="center" component="form">
+    <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" component="form">
       {availablePlayers && (
         <Autocomplete
           isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -46,7 +46,7 @@ export default function AccusationButton({ setCanAccuse }: { setCanAccuse: Dispa
           getOptionLabel={option => option.value}
         />
       )}
-      <Box display="grid">
+      <Box display="flex" justifyContent="center">
         <Button
           color="error"
           disabled={!selectedPlayer}

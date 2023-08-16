@@ -27,6 +27,11 @@ export default function AvailablePlaces() {
               장소 목록
             </TableCell>
           </TableRow>
+          <TableRow>
+            <TableCell align="center" colSpan={2} sx={{ color: 'yellow' }}>
+              장소를 클릭하면 후보에서 제외할 수 있습니다.
+            </TableCell>
+          </TableRow>
         </TableHead>
         <TableBody>
           {Array.from({ length: Math.ceil(availablePlaces.length / 2) }).map((_, idx) => {
