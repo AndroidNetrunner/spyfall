@@ -13,7 +13,7 @@ export default function GuessingPlaceButton() {
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음.');
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" component="form">
+    <Box component="form">
       {availablePlaces && (
         <Autocomplete
           value={selectedPlace}
@@ -26,8 +26,8 @@ export default function GuessingPlaceButton() {
               sx={{
                 width: {
                   xs: '100%',
-                  sm: '50%',
-                  md: 200,
+                  sm: '100%',
+                  md: '100%',
                 },
                 mt: 3,
                 mb: 1,
