@@ -167,12 +167,12 @@ const useCreateHandler = () => {
             ...gameData.finalVotes as {[key in UserId]: UserId | null},
             [from]: to,
         }
-        if (gameData && gameData.votes && gameData.spy) {
+        if (gameData && gameData.finalVotes && gameData.spy) {
           const spyId = (gameData.spy as UserState).id;
           if (!spyId)
             throw new Error('스파이가 존재하지 않음');
-          const noVotes = Object.values(gameData.votes as Vote).filter(vote => vote === null).length;
-          if (noVotes === 1)
+          const votes = Object.values(gameData.finalVotes as Vote).length;
+          if (votes === (gameData.players as UserState[]).length - 1)
             transaction.update(gameDocRef, {
               resultDescription: decideResultDescription(newFinalVotes, spyId),
             });
