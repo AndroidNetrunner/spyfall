@@ -29,9 +29,9 @@ export default function QuestionPhase() {
         <>
           {canAccuse && <AccusationButton setCanAccuse={setCanAccuse} />}
           <Timer />
+          {spy?.id === myUserId && <GuessingPlaceButton />}
         </>
       )}
-      {spy?.id === myUserId && <GuessingPlaceButton />}
       <AvailablePlaces />
       <Snackbar open={openedSnackbar} autoHideDuration={6000} onClose={() => setOpenedSnackbar(false)}>
         <Alert severity="warning">투표가 부결되었습니다.</Alert>
