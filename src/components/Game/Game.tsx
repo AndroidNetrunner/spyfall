@@ -8,7 +8,7 @@ import { selectUser } from '@/redux/slices/userSlice';
 import RoleInfo from './RoleInfo';
 import QuestionPhase from './QuestionPhase/QuestionPhase';
 import VotePhase from './VotePhase';
-import { selectTimer, setNominator, setNominee, setVotes } from '@/redux/slices/questionPhaseSlice';
+import { selectTimer, setNominator, setNominee, setTimer, setVotes } from '@/redux/slices/questionPhaseSlice';
 import { UserId } from '@/types/isValidUserId';
 import { Vote } from '@/types/Vote';
 import { setFinalVotes } from '@/redux/slices/votePhaseSlice';
@@ -23,6 +23,7 @@ export default function Game() {
   const timer = useSelector(selectTimer);
   const resultDescription = useSelector(selectResultDescription);
   useEffect(() => {
+    dispatch(setTimer(8 * 60));
     const unsubscribe = onSnapshot(docRef, snapshot => {
       const currentData = snapshot.data();
       if (typeof currentData === 'object') dispatch(setGame(currentData as GameState));
