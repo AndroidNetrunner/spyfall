@@ -6,6 +6,7 @@
 
 - Node.js
 - TypeScript
+- React-redux
 - Material UI
 - Firebase
 
