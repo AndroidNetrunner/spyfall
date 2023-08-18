@@ -57,11 +57,12 @@ export const gameSlice = createSlice({
         },
         setResultDescription: (state, {payload}: {payload: string}) => {
             state.resultDescription = payload;
-        }
+        },
+        resetGame: () => initialState,
     }
 })
 
-export const { setInvitationCode, setPlayers, setPlace, setSpy, setGame, setResultDescription } = gameSlice.actions;
+export const { setInvitationCode, setPlayers, setPlace, setSpy, setGame, setResultDescription, resetGame } = gameSlice.actions;
 
 export const selectSpy = (state: {game: GameState}) => state.game.spy;
 export const selectInvitationCode = (state: {game: GameState}): InvitationCode | null => state.game.invitationCode;

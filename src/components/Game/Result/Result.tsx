@@ -3,9 +3,10 @@ import { Alert, Box, Button, Snackbar, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import FinalVoteTable from './FinalVoteTable';
 import RoleTable from './RoleTable';
-import { selectId, setUserId } from '@/redux/slices/userSlice';
+import { selectUser, setUserId } from '@/redux/slices/userSlice';
 import { RESULTS } from '@/constants/results';
 import { useState } from 'react';
+import useCreateHandler from '@/hooks/useCreateHandler';
 
 export default function Result() {
   const place = useSelector(selectPlace);
@@ -13,8 +14,10 @@ export default function Result() {
   const dispatch = useDispatch();
   const notification = decideNotification(resultDescription);
   const spy = useSelector(selectSpy);
-  const myId = useSelector(selectId);
+  const myUser = useSelector(selectUser);
+  const myId = myUser.id;
   const [openSnackbar, setOpenSnackbar] = useState(true);
+  const { handleRejoin } = useCreateHandler();
   const severity = decideSeverity(resultDescription, spy?.id === myId);
   return (
     <Box
@@ -31,14 +34,29 @@ export default function Result() {
       <Typography component="h1" variant="h5">
         {resultDescription}
       </Typography>
-      <Button
-        variant="outlined"
-        onClick={() => {
-          dispatch(setUserId(null));
-          dispatch(setResultDescription(''));
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 2,
+          mt: 2,
         }}>
-        처음으로
-      </Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            dispatch(setUserId(null));
+            dispatch(setResultDescription(''));
+          }}>
+          처음으로
+        </Button>
+        <Button
+          variant="outlined"
+          color="success"
+          onClick={() => {
+            void handleRejoin(myUser);
+          }}>
+          다시 하기
+        </Button>
+      </Box>
       <Typography sx={{ mt: 3 }} component="h1" variant="h5">
         장소: {place}
       </Typography>

@@ -5,7 +5,7 @@ import db from '../../firebase/firebase.config';
 import { InvitationCode, isValidInvitationCode } from '@/types/isValidInvitationCode';
 import { UserId, isValidUserId } from '@/types/isValidUserId';
 import { setInvitationCode, setPlayers } from '@/redux/slices/roomSlice';
-import { GameState } from '@/redux/slices/gameSlice';
+import { GameState} from '@/redux/slices/gameSlice';
 import { Place, ROLES_BY_PLACE } from '@/constants/places';
 import { shuffleStringArray } from '@/utils/shuffleArray';
 import { Vote } from '@/types/Vote';
@@ -13,6 +13,7 @@ import { RESULTS } from '@/constants/results';
 
 const useCreateHandler = () => {
   const dispatch = useDispatch();
+
   const handleCreate = async (nickname: string) => {
     const getRandomInvitationCode = (): InvitationCode => {
       const number = (Math.floor(Math.random() * 900000) + 100000).toString();
@@ -32,6 +33,7 @@ const useCreateHandler = () => {
     dispatch(setUserId(id));
     dispatch(setPlayers([myUser]));
   };
+
   const handleJoin = async (nickname: string, invitationCode: InvitationCode) => {
     const docRef = doc(db, 'rooms', invitationCode);
     const roomSnap = await getDoc(docRef);
@@ -68,8 +70,6 @@ const useCreateHandler = () => {
         transaction.delete(roomDocRef);
         const newGame = createNewGame(invitationCode, players);
         transaction.set(gameDocRef, newGame);
-        dispatch(setInvitationCode(null));
-        dispatch(setPlayers([]));
       });
     } catch (error) {
       console.log('Failed to start the game', error);
@@ -185,7 +185,33 @@ const useCreateHandler = () => {
       console.log('Failed to start the game', error);
     }
   }
-  return { handleCreate, handleJoin, handleStart, handleGuess, handleAccuse, handleVote, handleFinalVote };
+
+  const handleRejoin = async (myUser: UserState) => {
+    const {invitationCode} = myUser;
+    if (!invitationCode)
+      throw new Error("초대 코드가 존재하지 않음");
+    const roomDocRef = doc(db, 'rooms', invitationCode);
+    try {
+      await runTransaction(db, async transaction => {
+        const roomSnap = await transaction.get(roomDocRef);
+        if (!roomSnap.exists()) {
+          transaction.set(roomDocRef, {
+            invitationCode,
+            players: [myUser]
+          })
+        }
+        else {
+        const roomData = roomSnap.data();
+        transaction.update(roomDocRef, {
+          players: [...roomData.players as UserState[], myUser]
+        })
+      }});
+      dispatch(setInvitationCode(invitationCode));
+    } catch (error) {
+      console.log('Failed to start the game', error);
+    }
+  }
+  return { handleCreate, handleJoin, handleStart, handleGuess, handleAccuse, handleVote, handleFinalVote, handleRejoin };
 };
 
 const createNewGame = (invitationCode: InvitationCode, players: UserState[]): GameState => {

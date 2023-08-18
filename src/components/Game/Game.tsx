@@ -1,9 +1,16 @@
 import { Box, Container } from '@mui/material';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { deleteDoc, doc, onSnapshot } from 'firebase/firestore';
 import { useEffect } from 'react';
 import db from '../../../firebase/firebase.config';
 import { useDispatch, useSelector } from 'react-redux';
-import { GameState, selectResultDescription, selectSpy, setGame, setResultDescription } from '@/redux/slices/gameSlice';
+import {
+  GameState,
+  resetGame,
+  selectResultDescription,
+  selectSpy,
+  setGame,
+  setResultDescription,
+} from '@/redux/slices/gameSlice';
 import { selectUser } from '@/redux/slices/userSlice';
 import RoleInfo from './RoleInfo';
 import QuestionPhase from './QuestionPhase/QuestionPhase';
@@ -47,6 +54,8 @@ export default function Game() {
 
     return () => {
       unsubscribe();
+      void deleteDoc(docRef);
+      dispatch(resetGame());
     };
   }, [docRef.path]);
 
