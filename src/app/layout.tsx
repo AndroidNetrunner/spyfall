@@ -30,6 +30,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <html lang="ko">
+          <head>
+            <script
+              async
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1473493437844810"
+              crossOrigin="anonymous"></script>
+          </head>
           <body className={inter.className}>
             <Provider store={store}>{children}</Provider>
           </body>
