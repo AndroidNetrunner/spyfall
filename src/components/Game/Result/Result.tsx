@@ -5,10 +5,12 @@ import FinalVoteTable from './FinalVoteTable';
 import RoleTable from './RoleTable';
 import { selectUser, setUserId } from '@/redux/slices/userSlice';
 import { RESULTS } from '@/constants/results';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useCreateHandler from '@/hooks/useCreateHandler';
+import { getAnalytics, logEvent } from 'firebase/analytics';
 
 export default function Result() {
+  const analytics = getAnalytics();
   const place = useSelector(selectPlace);
   const resultDescription = useSelector(selectResultDescription);
   const dispatch = useDispatch();
@@ -16,9 +18,16 @@ export default function Result() {
   const spy = useSelector(selectSpy);
   const myUser = useSelector(selectUser);
   const myId = myUser.id;
+  const { invitationCode } = myUser;
   const [openSnackbar, setOpenSnackbar] = useState(true);
   const { handleRejoin } = useCreateHandler();
   const severity = decideSeverity(resultDescription, spy?.id === myId);
+  useEffect(() => {
+    if (spy?.id === myUser.id) {
+      logEvent(analytics, 'GameEnd', { invitationCode });
+    }
+  }, []);
+
   return (
     <Box
       sx={{

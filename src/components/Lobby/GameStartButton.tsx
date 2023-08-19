@@ -2,10 +2,12 @@ import useCreateHandler from '@/hooks/useCreateHandler';
 import { selectInvitationCode, selectPlayers } from '@/redux/slices/roomSlice';
 import { UserState } from '@/redux/slices/userSlice';
 import { Alert, Box, Button } from '@mui/material';
+import { getAnalytics, logEvent } from 'firebase/analytics';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
 export default function GameStartButton() {
+  const analytics = getAnalytics();
   const players = useSelector(selectPlayers);
   const invitationCode = useSelector(selectInvitationCode);
   const { handleStart } = useCreateHandler();
@@ -18,7 +20,10 @@ export default function GameStartButton() {
           sx={{ mt: 3 }}
           variant="outlined"
           disabled={(() => !isAbleToStartGame(players))()}
-          onClick={() => void handleStart(invitationCode, players)}>
+          onClick={() => {
+            void handleStart(invitationCode, players);
+            logEvent(analytics, 'GameStart', { invitationCode });
+          }}>
           게임 시작
         </Button>
       </Box>

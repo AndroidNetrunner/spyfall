@@ -1,20 +1,23 @@
-'use client';
-
-import * as React from 'react';
-import { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import NicknameInput from './NicknameInput';
+import CreateRoomButton from './CreateRoomButton';
+import InvitationCodeInput from './InvitationCodeInput';
+import JoinRoomButton from './JoinRoomButton';
 import useCreateHandler from '../../hooks/useCreateHandler';
 import { InvitationCode, isValidInvitationCode } from '@/types/isValidInvitationCode';
+import useInvitationCodeValidation from '@/hooks/useInvitationCodeValidation';
 
-export default function Entrance() {
+function Entrance() {
   const [nickname, setNickname] = useState('');
-  const [invitationCode, setInvitationCode] = useState('');
   const { handleCreate, handleJoin } = useCreateHandler();
+  const { invitationCode, isValid, handleInputChange } = useInvitationCodeValidation();
+
+  const isInvitationCodeValid = isValidInvitationCode(invitationCode);
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -39,56 +42,24 @@ export default function Entrance() {
             alignItems: 'center',
           }}>
           <div>
-            <TextField
-              margin="normal"
-              required
-              inputProps={{
-                maxLength: 8,
-              }}
-              id="nickname"
-              label="닉네임"
-              name="nickname"
-              autoFocus
-              onChange={event => setNickname(event.target.value)}
-            />
-            <Button
-              onClick={() => void handleCreate(nickname)}
-              variant="outlined"
-              sx={{
-                ml: 3,
-                mt: 3,
-                mb: 2,
-              }}
-              disabled={!nickname || !!invitationCode}>
-              방 생성
-            </Button>
+            <NicknameInput onChange={setNickname} />
+            <CreateRoomButton onClick={() => void handleCreate(nickname)} disabled={!nickname || !!invitationCode} />
           </div>
           <div>
-            <TextField
-              margin="normal"
-              color="success"
-              helperText={
-                !!invitationCode && !isValidInvitationCode(invitationCode) ? '유효한 초대 코드가 아닙니다.' : ''
-              }
-              inputProps={{
-                maxLength: 6,
-              }}
-              error={!!invitationCode && !isValidInvitationCode(invitationCode)}
-              name="invitationCode"
-              label="초대 코드"
-              onChange={event => setInvitationCode(event.target.value)}
+            <InvitationCodeInput
+              onChange={handleInputChange}
+              error={!!invitationCode && !isInvitationCodeValid}
+              helperText={!isValid ? '유효한 초대 코드가 아닙니다.' : ''}
             />
-            <Button
+            <JoinRoomButton
               onClick={() => void handleJoin(nickname, invitationCode as InvitationCode)}
-              variant="outlined"
-              color="success"
-              sx={{ ml: 3, mt: 3, mb: 2 }}
-              disabled={!(nickname && isValidInvitationCode(invitationCode))}>
-              방 참가
-            </Button>
+              disabled={!(nickname && isInvitationCodeValid)}
+            />
           </div>
         </Box>
       </Box>
     </Container>
   );
 }
+
+export default Entrance;
