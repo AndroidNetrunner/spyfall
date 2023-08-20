@@ -1,7 +1,7 @@
 import useCreateHandler from '@/hooks/useCreateHandler';
 import { selectPlayers } from '@/redux/slices/gameSlice';
 import { selectId, selectUser } from '@/redux/slices/userSlice';
-import { UserId } from '@/types/isValidUserId';
+import { UserId } from '@/types/UserId';
 import { Autocomplete, Box, Button, TextField } from '@mui/material';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useSelector } from 'react-redux';

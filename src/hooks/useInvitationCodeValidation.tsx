@@ -1,5 +1,5 @@
+import { isInvitationCode } from '@/validators/isInvitationCode';
 import { useState } from 'react';
-import { isValidInvitationCode } from '@/types/isValidInvitationCode';
 
 export default function useInvitationCodeValidation() {
   const [invitationCode, setInvitationCode] = useState('');
@@ -7,7 +7,7 @@ export default function useInvitationCodeValidation() {
 
   const handleInputChange = (value: string) => {
     setInvitationCode(value);
-    setIsValid(isValidInvitationCode(value));
+    setIsValid(isInvitationCode(value));
   };
 
   return {

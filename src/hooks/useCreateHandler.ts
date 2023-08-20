@@ -2,14 +2,16 @@ import { useDispatch } from 'react-redux';
 import { setUserId, enterRoomByInvitationCode, setNickname, UserState } from '../redux/slices/userSlice';
 import { arrayUnion, setDoc, doc, getDoc, updateDoc, runTransaction } from 'firebase/firestore';
 import db from '../../firebase/firebase.config';
-import { InvitationCode, isValidInvitationCode } from '@/types/isValidInvitationCode';
-import { UserId, isValidUserId } from '@/types/isValidUserId';
+import { InvitationCode } from '@/types/InvitationCode';
+import { UserId } from '@/types/UserId';
 import { setInvitationCode, setPlayers } from '@/redux/slices/roomSlice';
 import { GameState} from '@/redux/slices/gameSlice';
 import { Place, ROLES_BY_PLACE } from '@/constants/places';
 import { shuffleStringArray } from '@/utils/shuffleArray';
 import { Vote } from '@/types/Vote';
 import { RESULTS } from '@/constants/results';
+import { isInvitationCode } from '@/validators/isInvitationCode';
+import { isUserId } from '@/validators/isUserId';
 
 const useCreateHandler = () => {
   const dispatch = useDispatch();
@@ -17,7 +19,7 @@ const useCreateHandler = () => {
   const handleCreate = async (nickname: string) => {
     const getRandomInvitationCode = (): InvitationCode => {
       const number = (Math.floor(Math.random() * 900000) + 100000).toString();
-      if (isValidInvitationCode(number)) return number;
+      if (isInvitationCode(number)) return number;
       else throw new Error('생성된 초대코드가 유효하지 않음.');
     };
     const invitationCode = getRandomInvitationCode();
@@ -272,7 +274,7 @@ const generateUserID = (): UserId => {
     { length: 10 },
     () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 62)],
   ).join('');
-  if (isValidUserId(id)) return id;
+  if (isUserId(id)) return id;
   throw new Error('생성된 userID가 유효하지 않음.');
 };
 

@@ -1,4 +1,4 @@
-import { UserId } from "@/types/isValidUserId";
+import { UserId } from "@/types/UserId";
 import { createSlice } from "@reduxjs/toolkit";
 import { UserState } from "./userSlice";
 

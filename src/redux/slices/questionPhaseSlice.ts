@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { UserId } from "@/types/isValidUserId";
+import { UserId } from "@/types/UserId";
 import { Vote } from "@/types/Vote";
 
 interface QuestionPhase {

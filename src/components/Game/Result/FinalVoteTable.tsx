@@ -1,7 +1,7 @@
 import { selectPlayers } from '@/redux/slices/gameSlice';
 import { UserState } from '@/redux/slices/userSlice';
 import { selectFinalVotes } from '@/redux/slices/votePhaseSlice';
-import { UserId } from '@/types/isValidUserId';
+import { UserId } from '@/types/UserId';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { useSelector } from 'react-redux';
 

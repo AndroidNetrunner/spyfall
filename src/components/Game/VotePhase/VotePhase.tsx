@@ -2,7 +2,7 @@ import useCreateHandler from '@/hooks/useCreateHandler';
 import { selectInvitationCode, selectPlayers } from '@/redux/slices/gameSlice';
 import { UserState, selectId } from '@/redux/slices/userSlice';
 import { selectFinalVotes } from '@/redux/slices/votePhaseSlice';
-import { UserId } from '@/types/isValidUserId';
+import { UserId } from '@/types/UserId';
 import {
   Box,
   Button,
@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import Result from './Result/Result';
+import Result from '../Result/Result';
 
 export default function VotePhase() {
   const myUserId = useSelector(selectId);

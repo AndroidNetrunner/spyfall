@@ -8,15 +8,16 @@ import CreateRoomButton from './CreateRoomButton';
 import InvitationCodeInput from './InvitationCodeInput';
 import JoinRoomButton from './JoinRoomButton';
 import useCreateHandler from '../../hooks/useCreateHandler';
-import { InvitationCode, isValidInvitationCode } from '@/types/isValidInvitationCode';
+import { InvitationCode } from '@/types/InvitationCode';
 import useInvitationCodeValidation from '@/hooks/useInvitationCodeValidation';
+import { isInvitationCode } from '@/validators/isInvitationCode';
 
 function Entrance() {
   const [nickname, setNickname] = useState('');
   const { handleCreate, handleJoin } = useCreateHandler();
   const { invitationCode, isValid, handleInputChange } = useInvitationCodeValidation();
 
-  const isInvitationCodeValid = isValidInvitationCode(invitationCode);
+  const isInvitationCodeValid = isInvitationCode(invitationCode);
 
   return (
     <Container component="main" maxWidth="xs">

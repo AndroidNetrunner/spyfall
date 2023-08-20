@@ -1,5 +1,5 @@
-import { InvitationCode } from "@/types/isValidInvitationCode";
-import { UserId } from "@/types/isValidUserId";
+import { InvitationCode } from "@/types/InvitationCode";
+import { UserId } from "@/types/UserId";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface UserState {

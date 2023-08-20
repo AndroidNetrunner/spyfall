@@ -7,7 +7,7 @@ import { selectInvitationCode, selectPlayers } from '@/redux/slices/roomSlice';
 import { doc } from 'firebase/firestore';
 import db from '../../../firebase/firebase.config';
 import { selectUser } from '@/redux/slices/userSlice';
-import InvitationCodeComponent from './invitationCode';
+import InvitationCodeComponent from './InvitationCode';
 import usePlayersUpdate from '@/hooks/usePlayersUpdate';
 
 export default function Lobby() {

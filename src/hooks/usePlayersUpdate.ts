@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { doc, onSnapshot, getDoc, updateDoc, DocumentData, DocumentReference } from 'firebase/firestore';
 import { UserState } from '@/redux/slices/userSlice';
 import { selectPlayers, setInvitationCode, setPlayers } from '@/redux/slices/roomSlice';
-import { InvitationCode } from '@/types/isValidInvitationCode';
+import { InvitationCode } from '@/types/InvitationCode';
 import db from '../../firebase/firebase.config';
 import isSamePlayersWithFirebaseStore from '@/utils/isSamePlayersWithFirebaseStore';
 

@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserState } from "./userSlice";
-import { UserId } from "@/types/isValidUserId";
+import { UserId } from "@/types/UserId";
 import { Place } from "@/constants/places";
-import { InvitationCode } from "@/types/isValidInvitationCode";
+import { InvitationCode } from "@/types/InvitationCode";
 
 export interface GameState {
     invitationCode: InvitationCode | null;

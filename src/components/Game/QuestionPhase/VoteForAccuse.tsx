@@ -2,7 +2,7 @@ import useCreateHandler from '@/hooks/useCreateHandler';
 import { selectInvitationCode, selectPlayers, selectSpy } from '@/redux/slices/gameSlice';
 import { selectNominator, selectNominee } from '@/redux/slices/questionPhaseSlice';
 import { selectId } from '@/redux/slices/userSlice';
-import { UserId } from '@/types/isValidUserId';
+import { UserId } from '@/types/UserId';
 import { Alert, AlertTitle, Box, Button } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';

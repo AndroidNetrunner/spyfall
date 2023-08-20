@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserState } from "./userSlice";
-import { InvitationCode } from "@/types/isValidInvitationCode";
+import { InvitationCode } from "@/types/InvitationCode";
 
 export interface RoomState {
     players: UserState[];

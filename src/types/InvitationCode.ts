@@ -1,0 +1,1 @@
+export type InvitationCode = string & { length: 6; };
