@@ -31,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CssBaseline />
         <html lang="ko">
           <head>
+            <title>스파이폴 온라인: 가입 없이 무료로 스파이폴 즐기기! - play-spyfall</title>
             <script
               async
               src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1473493437844810"

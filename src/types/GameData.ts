@@ -3,17 +3,15 @@ import { Vote } from "./Vote";
 import { UserId } from "./UserId";
 import { InvitationCode } from "./InvitationCode";
 import { UserState } from "@/redux/slices/userSlice";
+import { GameState } from "@/redux/slices/gameSlice";
 
-interface GameData {
+interface GameData extends GameState {
     votes?: Vote;
     finalVotes?: { [key in UserId]: UserId | null };
-    resultDescription: string;
     availablePlaces: Place[];
     invitationCode: InvitationCode;
     nominator?: UserId;
     nominee?: UserId;
-    players: UserState[];
-    roles: {[key in UserId] : string};
     spy: UserState;
 }
 

@@ -12,7 +12,7 @@ function isGameData(data: unknown): data is GameData {
         typeof obj.roles === 'object' &&
         typeof obj.spy === 'object' &&
 
-        (obj.votes ? Array.isArray(obj.votes) : true) &&
+        (obj.votes ? typeof obj.votes === 'object' : true) &&
         (obj.finalVotes ? typeof obj.finalVotes === 'object' : true) &&
         (obj.nominator ? typeof obj.nominator === 'string' : true) &&
         (obj.nominee ? typeof obj.nominee === 'string' : true)

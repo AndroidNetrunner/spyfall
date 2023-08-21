@@ -1,7 +1,7 @@
 import { selectSpy } from '@/redux/slices/gameSlice';
 import { selectId } from '@/redux/slices/userSlice';
 import { useSelector } from 'react-redux';
-import SpyRole from './Spyrole';
+import SpyRole from './SpyRole';
 import CitizenRole from './CitizenRole';
 
 export default function RoleInfo() {

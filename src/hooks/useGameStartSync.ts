@@ -4,10 +4,11 @@ import { deleteDoc, doc, onSnapshot } from "firebase/firestore";
 
 import db from "../../firebase/firebase.config";
 import { selectUser } from "@/redux/slices/userSlice";
-import { GameState, resetGame, setGame, setResultDescription } from "@/redux/slices/gameSlice";
+import { resetGame, setGame, setResultDescription } from "@/redux/slices/gameSlice";
 import { setFinalVotes } from '@/redux/slices/votePhaseSlice';
 import { setNominator, setNominee, setTimer, setVotes } from '@/redux/slices/questionPhaseSlice';
 import isGameData from "@/validators/isGameData";
+import GameData from "@/types/GameData";
 
 export default function useGameStartSync() {
     const { invitationCode } = useSelector(selectUser);
@@ -20,10 +21,9 @@ export default function useGameStartSync() {
         dispatch(setTimer(8 * 60));
 
         const unsubscribe = onSnapshot(docRef, snapshot => {
-            const currentData = snapshot.data();
-
+            const currentData = snapshot.data() as GameData;
             if (isGameData(currentData)) {
-                dispatch(setGame(currentData as GameState));
+                dispatch(setGame(currentData));
 
                 if (currentData.votes) {
                     dispatch(setVotes(currentData.votes));
