@@ -31,7 +31,7 @@ export default function useGameStartSync() {
                 if (currentData.nominee) {
                     dispatch(setNominee(currentData.nominee));
                 }
-                if (currentData.nominator) {
+                if (currentData.nominator !== undefined) {
                     dispatch(setNominator(currentData.nominator));
                 }
                 if (currentData.finalVotes) {
