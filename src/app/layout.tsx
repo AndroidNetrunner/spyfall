@@ -36,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               async
               src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1473493437844810"
               crossOrigin="anonymous"></script>
+            <meta name="naver-site-verification" content="6ee3bb7b2745a9d34ef088afda8f091c6d6f14b2" />
           </head>
           <body className={inter.className}>
             <Provider store={store}>{children}</Provider>
