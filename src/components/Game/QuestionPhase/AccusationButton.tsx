@@ -3,17 +3,26 @@ import { selectPlayers } from '@/redux/slices/gameSlice';
 import { selectId, selectUser } from '@/redux/slices/userSlice';
 import { UserId } from '@/types/UserId';
 import { Autocomplete, Box, Button, TextField } from '@mui/material';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export default function AccusationButton({ setCanAccuse }: { setCanAccuse: Dispatch<SetStateAction<boolean>> }) {
-  const [selectedPlayer, setSelectedPlayer] = useState<string | null | undefined>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState<UserId | null | undefined>(null);
   const myUserId = useSelector(selectId);
   if (!myUserId) throw new Error('유저 id가 존재하지 않음.');
   const availablePlayers = useSelector(selectPlayers).filter(player => player.id !== myUserId);
   const { invitationCode } = useSelector(selectUser);
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음.');
   const { handleAccuse } = useCreateHandler();
+  const handleButtonClick = () => {
+    if (selectedPlayer) {
+      void handleAccuse(invitationCode, myUserId, selectedPlayer);
+      setCanAccuse(false);
+    }
+  };
+  const playerOptions = useMemo(() => {
+    return availablePlayers.map(player => ({ id: player.id, value: player.nickname }));
+  }, [availablePlayers]);
   return (
     <Box component="form">
       {availablePlayers && (
@@ -40,21 +49,12 @@ export default function AccusationButton({ setCanAccuse }: { setCanAccuse: Dispa
               color="warning"
             />
           )}
-          options={availablePlayers.map(player => {
-            return { id: player.id, value: player.nickname };
-          })}
+          options={playerOptions}
           getOptionLabel={option => option.value}
         />
       )}
       <Box display="flex" justifyContent="center">
-        <Button
-          color="error"
-          disabled={!selectedPlayer}
-          variant="outlined"
-          onClick={() => {
-            void handleAccuse(invitationCode, myUserId, selectedPlayer as UserId);
-            setCanAccuse(false);
-          }}>
+        <Button color="error" disabled={!selectedPlayer} variant="outlined" onClick={handleButtonClick}>
           고발하기
         </Button>
       </Box>

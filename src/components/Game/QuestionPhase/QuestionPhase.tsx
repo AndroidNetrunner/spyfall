@@ -6,27 +6,30 @@ import { selectNominator } from '@/redux/slices/questionPhaseSlice';
 import VoteForAccuse from './VoteForAccuse';
 import { selectSpy } from '@/redux/slices/gameSlice';
 import { selectId } from '@/redux/slices/userSlice';
-import GuessingPlaceButton from './GuessingPlaceButton';
+import GuessingPlaceForm from './GuessingPlaceForm';
 import AvailablePlaces from './AvailablePlaces';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import useSnackbarState from '@/hooks/useSnackbarState';
 
 export default function QuestionPhase() {
   const [openedSnackbar, setOpenedSnackbar] = useSnackbarState();
+  const handleCloseSnackbar = useCallback(() => {
+    setOpenedSnackbar(false);
+  }, []);
 
   return (
     <Box>
-      <PlayerAction />
+      <PlayerActionPanel />
       <Timer />
       <AvailablePlaces />
-      <Snackbar open={openedSnackbar} autoHideDuration={6000} onClose={() => setOpenedSnackbar(false)}>
+      <Snackbar open={openedSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert severity="warning">투표가 부결되었습니다.</Alert>
       </Snackbar>
     </Box>
   );
 }
 
-function PlayerAction() {
+function PlayerActionPanel() {
   const nominator = useSelector(selectNominator);
   const spy = useSelector(selectSpy);
   const myUserId = useSelector(selectId);
@@ -36,7 +39,7 @@ function PlayerAction() {
   return (
     <>
       {canAccuse && <AccusationButton setCanAccuse={setCanAccuse} />}
-      {spy?.id === myUserId && <GuessingPlaceButton />}
+      {spy?.id === myUserId && <GuessingPlaceForm />}
     </>
   );
 }
