@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setUserId,
   enterRoomByInvitationCode,
@@ -17,7 +17,7 @@ import db from "../../firebase/firebase.config";
 import { InvitationCode } from "@/types/InvitationCode";
 import { UserId } from "@/types/UserId";
 import { setInvitationCode, setPlayers } from "@/redux/slices/roomSlice";
-import { GameState } from "@/redux/slices/gameSlice";
+import { GameState, selectSpy } from "@/redux/slices/gameSlice";
 import { Place, ROLES_BY_PLACE } from "@/constants/places";
 import { shuffleStringArray } from "@/utils/shuffleArray";
 import { Vote } from "@/types/Vote";
@@ -27,7 +27,7 @@ import { isUserId } from "@/validators/isUserId";
 
 const useCreateHandler = () => {
   const dispatch = useDispatch();
-
+  const spy = useSelector(selectSpy);
   const handleCreate = async (nickname: string) => {
     const getRandomInvitationCode = (): InvitationCode => {
       const number = (Math.floor(Math.random() * 900000) + 100000).toString();
@@ -130,8 +130,8 @@ const useCreateHandler = () => {
       console.log("Failed to start the game", error);
     }
   };
-  // TODO: handleVote를 handleAccusationVote로 바꾸기
-  const handleVote = async (
+  
+  const handleAccusationVote = async (
     invitationCode: InvitationCode,
     voterId: UserId,
     isYesVote: boolean,
@@ -150,7 +150,7 @@ const useCreateHandler = () => {
           const noVotes = Object.values(newData as Vote).filter(
             (vote) => vote === null
           ).length;
-          const updateData = { [`votes.${voterId}`]: isYesVote };
+          const updateData: typeof gameData = { [`votes.${voterId}`]: isYesVote };
 
           if (noVotes === 0) {
             updateData.nominator = null;
@@ -213,15 +213,17 @@ const useCreateHandler = () => {
         }
 
         const newFinalVotes = {
-          ...gameData.finalVotes,
+          ...gameData.finalVotes as {
+            [playerId in UserId] : UserId
+          },
           [from]: to,
         };
 
-        const spyId = gameData.spy.id;
+        const spyId = spy?.id;
         if (!spyId) throw new Error("Spy data is missing.");
 
-        const voteCount = Object.values(gameData.finalVotes).length;
-        if (allPlayersVoted(voteCount, gameData.players)) {
+        const voteCount = Object.values(gameData.finalVotes as typeof newFinalVotes).length;
+        if (allPlayersVoted(voteCount, gameData.players as UserState[])) {
           const resultDescription = decideResultDescription(
             newFinalVotes,
             spyId
@@ -268,7 +270,7 @@ const useCreateHandler = () => {
     handleStart,
     handleGuess,
     handleAccuse,
-    handleVote,
+    handleVote: handleAccusationVote,
     handleFinalVote,
     handleRejoin,
   };

@@ -1,28 +1,16 @@
 import React from 'react';
-import {
-  RadioGroup,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Radio
-} from '@mui/material';
-
-interface Player {
-  id: string;
-  nickname: string;
-}
+import { RadioGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Radio } from '@mui/material';
+import { UserState } from '@/redux/slices/userSlice';
+import { UserId } from '@/types/UserId';
 
 interface VoteTableProps {
-  opponents: Player[];
-  onVoteChange: (value: string) => void;
+  opponents: UserState[];
+  onVoteChange: React.Dispatch<React.SetStateAction<UserId | null>>;
 }
-const TABLE_HEADER = "스파이는 누구인가요?"
+const TABLE_HEADER = '스파이는 누구인가요?';
 const VoteTable: React.FC<VoteTableProps> = ({ opponents, onVoteChange }) => {
   return (
-    <RadioGroup name="vote-radio-button" onChange={e => onVoteChange(e.target.value)}>
+    <RadioGroup name="vote-radio-button" onChange={e => onVoteChange(e.target.value as UserId)}>
       <TableContainer>
         <Table aria-label="simple table">
           <TableHead>
@@ -48,6 +36,6 @@ const VoteTable: React.FC<VoteTableProps> = ({ opponents, onVoteChange }) => {
       </TableContainer>
     </RadioGroup>
   );
-}
+};
 
 export default VoteTable;
