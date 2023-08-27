@@ -25,6 +25,7 @@ import { RESULTS } from "@/constants/results";
 import { isInvitationCode } from "@/validators/isInvitationCode";
 import { isUserId } from "@/validators/isUserId";
 
+
 const useCreateHandler = () => {
   const dispatch = useDispatch();
   const spy = useSelector(selectSpy);
@@ -48,29 +49,41 @@ const useCreateHandler = () => {
     dispatch(setPlayers([myUser]));
   };
 
-  const handleJoin = async (
-    nickname: string,
-    invitationCode: InvitationCode
-  ) => {
-    const docRef = doc(db, "rooms", invitationCode);
-    const roomSnap = await getDoc(docRef);
-    if (!roomSnap.exists()) alert("해당하는 방이 존재하지 않습니다.");
-    else {
-      const myUser = {
-        invitationCode,
-        id: generateUserID(),
-        nickname,
-      };
-      dispatch(enterRoomByInvitationCode(myUser.invitationCode));
-      dispatch(setInvitationCode(myUser.invitationCode));
-      dispatch(setUserId(myUser.id));
-      dispatch(setNickname(myUser.nickname));
-      await updateDoc(docRef, {
-        players: arrayUnion(myUser),
-      });
-    }
+const dispatchUserDetails = (myUser: UserState) => {
+  dispatch(enterRoomByInvitationCode(myUser.invitationCode));
+  dispatch(setInvitationCode(myUser.invitationCode));
+  dispatch(setUserId(myUser.id));
+  dispatch(setNickname(myUser.nickname));
+}
+
+const handleJoin = async (
+  nickname: string,
+  invitationCode: InvitationCode
+) => {
+  const roomSnap = await getRoomData(invitationCode);
+
+  if (!roomSnap.exists()) {
+    alert("해당하는 방이 존재하지 않습니다.");
+    return;
+  }
+
+  const myUser = {
+    invitationCode,
+    id: generateUserID(),
+    nickname,
   };
 
+  dispatchUserDetails(myUser);
+
+  try {
+    await updateDoc(roomSnap.ref, {
+      players: arrayUnion(myUser),
+    });
+  } catch (error) {
+    console.error("Error updating room:", error);
+    alert("방 정보를 업데이트하는 중 오류가 발생했습니다.");
+  }
+};
   const handleStart = async (
     invitationCode: InvitationCode,
     players: UserState[]
@@ -270,11 +283,22 @@ const useCreateHandler = () => {
     handleStart,
     handleGuess,
     handleAccuse,
-    handleVote: handleAccusationVote,
+    handleAccusationVote,
     handleFinalVote,
     handleRejoin,
   };
 };
+const getRoomData = async (invitationCode: InvitationCode) => {
+  try {
+    const docRef = doc(db, "rooms", invitationCode);
+    const roomSnap = await getDoc(docRef);
+    return roomSnap;
+  } catch (error) {
+    console.error("Error fetching room:", error);
+    alert("방 정보를 가져오는 중 오류가 발생했습니다.");
+    throw error;
+  }
+}
 
 const allPlayersVoted = (votes: number, players: UserState[]): boolean => {
   return votes === players.length - 1;
