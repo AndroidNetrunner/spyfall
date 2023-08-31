@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { UserState } from "./userSlice";
 import { InvitationCode } from "@/types/InvitationCode";
+import Players from "@/types/Players";
 
 export interface RoomState {
-    players: UserState[];
+    players: Players
     invitationCode: InvitationCode | null;
 }
 
 const initialState: RoomState = {
-    players: [],
+    players: {},
     invitationCode: null
 }
 
@@ -16,7 +16,7 @@ export const roomSlice = createSlice({
     name: "room",
     initialState,
     reducers: {
-        setPlayers: (state, { payload } : { payload: UserState[]}) => {
+        setPlayers: (state, { payload } : { payload: Players}) => {
             state.players = payload
         },
         setInvitationCode: (state, { payload }: { payload: InvitationCode | null }) => {

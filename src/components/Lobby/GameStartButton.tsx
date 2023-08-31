@@ -1,6 +1,6 @@
 import useCreateHandler from '@/hooks/useCreateHandler';
 import { selectInvitationCode, selectPlayers } from '@/redux/slices/roomSlice';
-import { UserState } from '@/redux/slices/userSlice';
+import Players from '@/types/Players';
 import { Alert, Box, Button } from '@mui/material';
 import { getAnalytics, logEvent } from 'firebase/analytics';
 import React from 'react';
@@ -31,6 +31,6 @@ export default function GameStartButton() {
   );
 }
 
-function isAbleToStartGame(players: UserState[]): boolean {
-  return players.length >= 3 && players.length <= 8;
+function isAbleToStartGame(players: Players): boolean {
+  return Object.values(players).length >= 3 && Object.values(players).length <= 8;
 }

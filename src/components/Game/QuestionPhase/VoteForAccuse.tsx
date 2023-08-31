@@ -16,8 +16,9 @@ export default function VoteForAccuse() {
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');
   const myUserId = useSelector(selectId);
   if (!myUserId) throw new Error('유저 id가 존재하지 않음');
-  const nominee = players.find(player => player.id === nomineeId);
-  const nominator = players.find(player => player.id === nominatorId);
+  const playerIdsArray = Object.keys(players);
+  const nominee = players[playerIdsArray.find(playerId => playerId === nomineeId) as UserId];
+  const nominator = players[playerIdsArray.find(playerId => playerId === nominatorId) as UserId];
   const { handleAccusationVote: handleVote } = useCreateHandler();
   const [hasVote, setHasVote] = useState(nomineeId !== myUserId);
   const handleVoteClick = useCallback(

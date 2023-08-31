@@ -3,10 +3,11 @@ import { UserState } from "./userSlice";
 import { UserId } from "@/types/UserId";
 import { Place } from "@/constants/places";
 import { InvitationCode } from "@/types/InvitationCode";
+import Players from "@/types/Players";
 
 export interface GameState {
     invitationCode: InvitationCode | null;
-    players: UserState[];
+    players: Players;
     place: string;
     roles: {[key in UserId] : string};
     availablePlaces: Place[] | null;
@@ -16,7 +17,7 @@ export interface GameState {
 
 const initialState: GameState = {
     invitationCode: null,
-    players: [],
+    players: {},
     place: "",
     roles: {},
     availablePlaces: null,
@@ -31,7 +32,7 @@ export const gameSlice = createSlice({
         setInvitationCode: (state, {payload}: {payload: InvitationCode}) => {
             state.invitationCode = payload;
         },
-        setPlayers: (state, { payload }: { payload: UserState[]}) => {
+        setPlayers: (state, { payload }: { payload: Players}) => {
             state.players = payload;
         },
         setPlace: (state, { payload }: { payload: string}) => {

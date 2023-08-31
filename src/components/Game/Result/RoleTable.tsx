@@ -18,7 +18,7 @@ export default function RoleTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {players.map((player: UserState) => {
+          {Object.values(players).map((player: UserState) => {
             const playerRole = roles[player.id as UserId];
             if (!player.id) throw new Error('참가자 id가 존재하지 않음.');
             return (

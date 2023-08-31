@@ -1,6 +1,6 @@
 import useCreateHandler from '@/hooks/useCreateHandler';
 import { selectPlayers } from '@/redux/slices/gameSlice';
-import { selectId, selectUser } from '@/redux/slices/userSlice';
+import { UserState, selectId, selectUser } from '@/redux/slices/userSlice';
 import { UserId } from '@/types/UserId';
 import { Autocomplete, Box, Button, TextField } from '@mui/material';
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
@@ -10,7 +10,9 @@ export default function AccusationButton({ setCanAccuse }: { setCanAccuse: Dispa
   const [selectedPlayer, setSelectedPlayer] = useState<UserId | null | undefined>(null);
   const myUserId = useSelector(selectId);
   if (!myUserId) throw new Error('유저 id가 존재하지 않음.');
-  const availablePlayers = useSelector(selectPlayers).filter(player => player.id !== myUserId);
+  const availablePlayers = Object.values(useSelector(selectPlayers)).filter(
+    (player: UserState) => player.id !== myUserId,
+  );
   const { invitationCode } = useSelector(selectUser);
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음.');
   const { handleAccuse } = useCreateHandler();
@@ -21,7 +23,7 @@ export default function AccusationButton({ setCanAccuse }: { setCanAccuse: Dispa
     }
   };
   const playerOptions = useMemo(() => {
-    return availablePlayers.map(player => ({ id: player.id, value: player.nickname }));
+    return availablePlayers.map((player: UserState) => ({ id: player.id, value: player.nickname }));
   }, [availablePlayers]);
   return (
     <Box component="form">

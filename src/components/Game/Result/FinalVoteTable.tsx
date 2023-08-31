@@ -19,9 +19,11 @@ export default function FinalVoteTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {players.map((player: UserState) => {
+          {Object.values(players).map((player: UserState) => {
             const targetId: UserId = finalVotes[player.id as UserId] as UserId;
-            const targetNickname = players.find(player => player.id === targetId)?.nickname;
+            const targetNickname = (
+              Object.values(players).find((player: UserState) => player.id === targetId) as UserState
+            ).nickname;
             if (!player.id) throw new Error('참가자 id가 존재하지 않음.');
             return (
               <TableRow key={player.id}>

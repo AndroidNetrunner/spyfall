@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import { ref, onValue, remove } from "firebase/database";
 
 import db from "../../firebase/firebase.config";
 import { selectUser } from "@/redux/slices/userSlice";
@@ -14,14 +14,14 @@ export default function useGameStartSync() {
     const { invitationCode } = useSelector(selectUser);
     if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');
 
-    const docRef = doc(db, 'games', invitationCode);
+    const gameRef = ref(db, 'games/' + invitationCode);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(setTimer(8 * 60));
 
-        const unsubscribe = onSnapshot(docRef, snapshot => {
-            const currentData = snapshot.data() as GameData;
+        const unsubscribe = onValue(gameRef, snapshot => {
+            const currentData = snapshot.val() as GameData;
             if (isGameData(currentData)) {
                 dispatch(setGame(currentData));
 
@@ -45,8 +45,8 @@ export default function useGameStartSync() {
 
         return () => {
             unsubscribe();
-            void deleteDoc(docRef);
+            void remove(gameRef);
             dispatch(resetGame());
         };
-    }, [docRef.path, dispatch]);
+    }, [gameRef, dispatch]);
 }

@@ -6,8 +6,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { UserState } from '../../redux/slices/userSlice';
+import Players from '@/types/Players';
 
-export default function PlayerWaitList({ players }: { players: UserState[] }) {
+export default function PlayerWaitList({ players }: { players: Players }) {
   return (
     <TableContainer>
       <Table aria-label="simple table">
@@ -17,7 +18,7 @@ export default function PlayerWaitList({ players }: { players: UserState[] }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {players.map((player: UserState) => (
+          {Object.values(players).map((player: UserState) => (
             <TableRow key={player.id}>
               <TableCell component="th" scope="row">
                 {player.nickname}
