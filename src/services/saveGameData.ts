@@ -1,8 +1,8 @@
-import { doc, setDoc } from "firebase/firestore";
-import db from "../../firebase/firebase.config";
-import GameData from "@/types/GameData";
+import db from '../../firebase/firebase.config';
+import GameData from '@/types/GameData';
+import { ref, set } from 'firebase/database';
 
 export default async function saveGameData(invitationCode: string, gameData: GameData) {
-    const gameRef = doc(db, 'games', invitationCode);
-    await setDoc(gameRef, gameData);
+  const gameRef = ref(db, 'games/' + invitationCode);
+  await set(gameRef, gameData);
 }

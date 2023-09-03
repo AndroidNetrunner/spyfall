@@ -1,4 +1,4 @@
-import useCreateHandler from '@/hooks/useCreateHandler';
+import useHandler from '@/hooks/useHandler';
 import { selectPlayers } from '@/redux/slices/gameSlice';
 import { UserState, selectId, selectUser } from '@/redux/slices/userSlice';
 import { UserId } from '@/types/UserId';
@@ -15,7 +15,7 @@ export default function AccusationButton({ setCanAccuse }: { setCanAccuse: Dispa
   );
   const { invitationCode } = useSelector(selectUser);
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음.');
-  const { handleAccuse } = useCreateHandler();
+  const { handleAccuse } = useHandler();
   const handleButtonClick = () => {
     if (selectedPlayer) {
       void handleAccuse(invitationCode, myUserId, selectedPlayer);

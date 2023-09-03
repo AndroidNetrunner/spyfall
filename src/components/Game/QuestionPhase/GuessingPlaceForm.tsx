@@ -1,5 +1,5 @@
 import { Place } from '@/constants/places';
-import useCreateHandler from '@/hooks/useCreateHandler';
+import useHandler from '@/hooks/useHandler';
 import { selectAvailablePlaces, selectInvitationCode } from '@/redux/slices/gameSlice';
 import { Autocomplete, Box, Button, TextField } from '@mui/material';
 import { useCallback, useState } from 'react';
@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 export default function GuessingPlaceForm() {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const availablePlaces = useSelector(selectAvailablePlaces);
-  const { handleGuess } = useCreateHandler();
+  const { handleGuess } = useHandler();
   const invitationCode = useSelector(selectInvitationCode);
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음.');
 

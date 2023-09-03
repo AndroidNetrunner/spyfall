@@ -19,8 +19,8 @@ export default function QuestionPhase() {
 
   return (
     <Box>
-      <PlayerActionPanel />
       <Timer />
+      <PlayerActionPanel />
       <AvailablePlaces />
       <Snackbar open={openedSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert severity="warning">투표가 부결되었습니다.</Alert>

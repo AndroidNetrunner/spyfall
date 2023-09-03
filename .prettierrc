@@ -10,4 +10,4 @@
     "arrowParens": "avoid",
     "vueIndentScriptAndStyle": false,
     "endOfLine": "auto"
-  }
+}

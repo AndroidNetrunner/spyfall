@@ -6,8 +6,10 @@ import RoleTable from './RoleTable';
 import { selectUser, setUserId } from '@/redux/slices/userSlice';
 import { RESULTS } from '@/constants/results';
 import { useEffect, useState } from 'react';
-import useCreateHandler from '@/hooks/useCreateHandler';
+import useHandler from '@/hooks/useHandler';
 import { getAnalytics, logEvent } from 'firebase/analytics';
+import { ref, remove } from 'firebase/database';
+import db from '../../../../firebase/firebase.config';
 
 export default function Result() {
   const analytics = getAnalytics();
@@ -20,9 +22,11 @@ export default function Result() {
   const myId = myUser.id;
   const { invitationCode } = myUser;
   const [openSnackbar, setOpenSnackbar] = useState(true);
-  const { handleRejoin } = useCreateHandler();
+  const { handleRejoin } = useHandler();
   const severity = decideSeverity(resultDescription, spy?.id === myId);
   useEffect(() => {
+    if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');
+    void remove(ref(db, 'games/' + invitationCode));
     if (spy?.id === myUser.id) {
       logEvent(analytics, 'GameEnd', { invitationCode });
     }

@@ -1,4 +1,4 @@
-import useCreateHandler from '@/hooks/useCreateHandler';
+import useHandler from '@/hooks/useHandler';
 import { selectInvitationCode, selectPlayers, selectSpy } from '@/redux/slices/gameSlice';
 import { selectNominator, selectNominee } from '@/redux/slices/questionPhaseSlice';
 import { selectId } from '@/redux/slices/userSlice';
@@ -19,7 +19,7 @@ export default function VoteForAccuse() {
   const playerIdsArray = Object.keys(players);
   const nominee = players[playerIdsArray.find(playerId => playerId === nomineeId) as UserId];
   const nominator = players[playerIdsArray.find(playerId => playerId === nominatorId) as UserId];
-  const { handleAccusationVote: handleVote } = useCreateHandler();
+  const { handleAccusationVote: handleVote } = useHandler();
   const [hasVote, setHasVote] = useState(nomineeId !== myUserId);
   const handleVoteClick = useCallback(
     (isSpy: boolean) => {

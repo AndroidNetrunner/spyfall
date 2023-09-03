@@ -1,4 +1,4 @@
-import useCreateHandler from '@/hooks/useCreateHandler';
+import useHandler from '@/hooks/useHandler';
 import { selectInvitationCode, selectPlayers } from '@/redux/slices/roomSlice';
 import Players from '@/types/Players';
 import { Alert, Box, Button } from '@mui/material';
@@ -10,7 +10,7 @@ export default function GameStartButton() {
   const analytics = getAnalytics();
   const players = useSelector(selectPlayers);
   const invitationCode = useSelector(selectInvitationCode);
-  const { handleStart } = useCreateHandler();
+  const { handleStartGame: handleStart } = useHandler();
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음.');
   return (
     <>
