@@ -8,17 +8,17 @@ import db from '../../../firebase/firebase.config';
 import { selectUser } from '@/redux/slices/userSlice';
 import InvitationCodeComponent from './InvitationCode';
 import usePlayersUpdate from '@/hooks/usePlayersUpdate';
-import { ref } from 'firebase/database';
+import { onDisconnect, ref } from 'firebase/database';
 
 export default function Lobby() {
   const invitationCode = useSelector(selectInvitationCode);
   const players = useSelector(selectPlayers);
   const myUserId = useSelector(selectUser).id;
   if (!invitationCode || !myUserId) throw new Error('초대 코드 혹은 userID가 존재하지 않음');
-  const { deletePlayer } = usePlayersUpdate(ref(db, 'rooms/' + invitationCode));
-
+  usePlayersUpdate(ref(db, 'rooms/' + invitationCode));
   useEffect(() => {
-    window.addEventListener('beforeunload', () => void deletePlayer(myUserId, invitationCode));
+    const userRef = ref(db, 'rooms/' + invitationCode + '/players/' + myUserId);
+    void onDisconnect(userRef).remove();
   }, []);
   return (
     <Container component="main" maxWidth="xs">
