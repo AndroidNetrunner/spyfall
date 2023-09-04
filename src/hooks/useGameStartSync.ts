@@ -19,7 +19,7 @@ export default function useGameStartSync() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setTimer(5));
+    dispatch(setTimer(8 * 60));
     console.log(`useEffect activated!`);
     const unsubscribe = onValue(gameRef, snapshot => {
       const currentData = snapshot.val() as GameData;
