@@ -15,6 +15,7 @@ import { RoomData } from '@/types/Data';
 import GameData from '@/types/GameData';
 import Players from '@/types/Players';
 import createNewGame from '../utils/createNewGame';
+import { LOCAL_STORAGE_ID, LOCAL_STORAGE_INVITATION_CODE } from '@/constants/localStorage';
 
 const useHandler = () => {
   if (!db) throw new Error();
@@ -230,6 +231,17 @@ const useHandler = () => {
       console.log('Failed to start the game', error);
     }
   };
+
+  const handleQuit = () => {
+    const isConfirmed = window.confirm('정말로 강제 종료하시겠습니까?');
+    if (isConfirmed && typeof window !== undefined) {
+      localStorage.removeItem(LOCAL_STORAGE_ID);
+      localStorage.removeItem(LOCAL_STORAGE_INVITATION_CODE);
+      dispatch(setUserId(null));
+      dispatch(enterRoomByInvitationCode(null));
+    }
+  };
+
   return {
     handleCreate,
     handleJoin,
@@ -239,6 +251,7 @@ const useHandler = () => {
     handleAccusationVote,
     handleFinalVote,
     handleRejoin,
+    handleQuit,
   };
 };
 

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectSpy } from '@/redux/slices/gameSlice';
 import RoleInfo from './RoleInfo/RoleInfo';
 import useGameRenderer from '@/hooks/useGameRenderer';
+import ForceQuitButton from './ForceQuitButton';
 
 export default function Game() {
   const spy = useSelector(selectSpy);
@@ -19,6 +20,10 @@ export default function Game() {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
+        <Box sx={{ alignSelf: 'flex-start' }}>
+          {/* 화면의 왼쪽에 ForceQuitButton을 배치하고 싶음. */}
+          <ForceQuitButton />
+        </Box>
         {spy && <RoleInfo />}
         <Phase />
       </Box>
