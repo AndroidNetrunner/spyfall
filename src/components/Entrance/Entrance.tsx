@@ -11,37 +11,22 @@ import useHandler from '../../hooks/useHandler';
 import { InvitationCode } from '@/types/InvitationCode';
 import useInvitationCodeValidation from '@/hooks/useInvitationCodeValidation';
 import { isInvitationCode } from '@/validators/isInvitationCode';
+import { mainBoxStyle, avatarStyle, typographyStyle, formStyle } from './Entrance.styles';
 
 function Entrance() {
   const [nickname, setNickname] = useState('');
   const { handleCreate, handleJoin } = useHandler();
   const { invitationCode, isValid, handleInputChange } = useInvitationCodeValidation();
-
   const isInvitationCodeValid = isInvitationCode(invitationCode);
 
   return (
     <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Avatar src="/spy.svg" alt="스파이 아이콘" sx={{ m: 1, background: 'white' }} />
-        <Typography sx={{ mt: 3 }} component="h1" variant="h5">
+      <Box sx={mainBoxStyle}>
+        <Avatar src="/spy.svg" alt="스파이 아이콘" sx={avatarStyle} />
+        <Typography sx={typographyStyle} component="h1" variant="h5">
           스파이폴에 오신 것을 환영합니다!
         </Typography>
-        <Box
-          component="form"
-          noValidate
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}>
+        <Box component="form" noValidate sx={formStyle}>
           <div>
             <NicknameInput onChange={setNickname} />
             <CreateRoomButton onClick={() => void handleCreate(nickname)} disabled={!nickname || !!invitationCode} />
