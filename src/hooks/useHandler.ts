@@ -135,14 +135,15 @@ const useHandler = () => {
           const noVotes = Object.values(currentData.votes).filter(vote => vote === NO_VOTE_YET).length;
           /* ts-ignore를 사용한 이유는, rela*/
           if (noVotes === 0) {
-            // @ts-ignore
-            currentData.nominator = null;
-            // @ts-ignore
-            currentData.nominee = null;
             if (Object.values(currentData.votes).every(data => data === true)) {
               currentData.resultDescription =
                 spyId === currentData.nominee ? RESULTS.citizensWin.arrestCorrectly : RESULTS.spyWin.arrestIncorrectly;
             }
+            // @ts-ignore
+            currentData.nominator = null;
+            // @ts-ignore
+            currentData.nominee = null;
+
             // @ts-ignore
             currentData.votes = null;
           }
