@@ -39,6 +39,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               async
               src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1473493437844810"
               crossOrigin="anonymous"></script>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  if (!window.localStorage) {
+                    window.localStorage = {
+                      getItem: function() {},
+                      setItem: function() {},
+                      removeItem: function() {},
+                    };
+                  }
+                `,
+              }}
+            />
             <meta name="description" content={descriptionContent} />
             <meta property="og:title" content={title} />
             <meta property="og:description" content={descriptionContent} />

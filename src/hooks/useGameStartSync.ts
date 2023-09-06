@@ -9,18 +9,23 @@ import { setFinalVotes } from '@/redux/slices/votePhaseSlice';
 import { resetQuestionPhase, setNominator, setNominee, setTimer, setVotes } from '@/redux/slices/questionPhaseSlice';
 import isGameData from '@/validators/isGameData';
 import GameData from '@/types/GameData';
+import { LOCAL_STORAGE_ID, LOCAL_STORAGE_INVITATION_CODE } from '@/constants/localStorage';
 
 export default function useGameStartSync() {
-  const { invitationCode } = useSelector(selectUser);
+  const { invitationCode, id } = useSelector(selectUser);
   const [isGameStarted, setGameStarted] = useState(false);
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');
+  if (!id) throw new Error('유저 id가 존재하지 않음');
 
   const gameRef = ref(db, 'games/' + invitationCode);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setTimer(8 * 60));
-    console.log(`useEffect activated!`);
+    if (typeof window !== undefined) {
+      localStorage.setItem(LOCAL_STORAGE_ID, id);
+      localStorage.setItem(LOCAL_STORAGE_INVITATION_CODE, invitationCode);
+    }
     const unsubscribe = onValue(gameRef, snapshot => {
       const currentData = snapshot.val() as GameData;
       if (isGameData(currentData)) {
