@@ -1,21 +1,26 @@
+import React, { useCallback, useState } from 'react';
 import { Alert, Box, Snackbar } from '@mui/material';
-import Timer from './Timer';
-import AccusationButton from './AccusationButton';
 import { useSelector } from 'react-redux';
-import { selectNominator } from '@/redux/slices/questionPhaseSlice';
-import VoteForAccuse from './VoteForAccuse';
-import { selectSpy } from '@/redux/slices/gameSlice';
-import { selectId } from '@/redux/slices/userSlice';
-import GuessingPlaceForm from './GuessingPlaceForm';
+
+import AccusationButton from './AccusationButton';
 import AvailablePlaces from './AvailablePlaces';
-import { useCallback, useState } from 'react';
+import GuessingPlaceForm from './GuessingPlaceForm';
+import Timer from './Timer';
+import VoteForAccuse from './VoteForAccuse';
+
 import useSnackbarState from '@/hooks/useSnackbarState';
+
+import { selectId } from '@/redux/slices/userSlice';
+import { selectNominator } from '@/redux/slices/questionPhaseSlice';
+import { selectSpy } from '@/redux/slices/gameSlice';
+
 
 export default function QuestionPhase() {
   const [openedSnackbar, setOpenedSnackbar] = useSnackbarState();
+
   const handleCloseSnackbar = useCallback(() => {
     setOpenedSnackbar(false);
-  }, []);
+  }, [setOpenedSnackbar]);
 
   return (
     <Box>
@@ -34,12 +39,18 @@ function PlayerActionPanel() {
   const spy = useSelector(selectSpy);
   const myUserId = useSelector(selectId);
   const [canAccuse, setCanAccuse] = useState(true);
-  if (nominator) return <VoteForAccuse />;
+
+  if (nominator) {
+    return <VoteForAccuse />;
+  }
+
+  const renderAccusationButton = canAccuse && <AccusationButton setCanAccuse={setCanAccuse} />;
+  const renderGuessingPlaceForm = spy?.id === myUserId && <GuessingPlaceForm />;
 
   return (
     <>
-      {canAccuse && <AccusationButton setCanAccuse={setCanAccuse} />}
-      {spy?.id === myUserId && <GuessingPlaceForm />}
+      {renderAccusationButton}
+      {renderGuessingPlaceForm}
     </>
   );
 }
