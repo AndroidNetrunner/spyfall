@@ -1,30 +1,33 @@
+import { useState, useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { Alert, AlertTitle, Box } from '@mui/material';
+
 import useHandler from '@/hooks/useHandler';
+
 import { selectInvitationCode, selectPlayers, selectSpy } from '@/redux/slices/gameSlice';
 import { selectNominator, selectNominee } from '@/redux/slices/questionPhaseSlice';
 import { selectId } from '@/redux/slices/userSlice';
+
 import { UserId } from '@/types/UserId';
-import { Alert, AlertTitle, Box, Button } from '@mui/material';
-import { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
+import VoteButtonForAccuse from './VoteButtonForAccuse';
 
 export default function VoteForAccuse() {
-  const players = useSelector(selectPlayers);
   const nomineeId = useSelector(selectNominee);
   const nominatorId = useSelector(selectNominator);
   const invitationCode = useSelector(selectInvitationCode);
+  const players = useSelector(selectPlayers);
   const spy = useSelector(selectSpy);
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');
   const myUserId = useSelector(selectId);
   if (!myUserId) throw new Error('유저 id가 존재하지 않음');
-  const playerIdsArray = Object.keys(players);
-  const nominee = players[playerIdsArray.find(playerId => playerId === nomineeId) as UserId];
-  const nominator = players[playerIdsArray.find(playerId => playerId === nominatorId) as UserId];
-  const { handleAccusationVote: handleVote } = useHandler();
+  const nominee = players[nomineeId as UserId];
+  const nominator = players[nominatorId as UserId];
+  const { handleAccusationVote } = useHandler();
   const [hasVote, setHasVote] = useState(nomineeId !== myUserId);
   const handleVoteClick = useCallback(
     (isSpy: boolean) => {
       setHasVote(false);
-      void handleVote(invitationCode, myUserId, isSpy, spy?.id as UserId);
+      void handleAccusationVote(invitationCode, myUserId, isSpy, spy?.id as UserId);
     },
     [invitationCode, myUserId, spy],
   );
@@ -41,12 +44,8 @@ export default function VoteForAccuse() {
             {nominee?.nickname}님은 스파이인가요?
           </Box>
           <Box display="flex" justifyContent="center">
-            <Button variant="outlined" color="success" onClick={() => handleVoteClick(true)}>
-              네
-            </Button>
-            <Button variant="outlined" color="error" onClick={() => handleVoteClick(false)}>
-              아니오
-            </Button>
+            <VoteButtonForAccuse isSpy={true} onClick={handleVoteClick} />
+            <VoteButtonForAccuse isSpy={false} onClick={handleVoteClick} />
           </Box>
         </>
       )}

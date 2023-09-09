@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-import NicknameInput from './NicknameInput';
-import CreateRoomButton from './CreateRoomButton';
-import InvitationCodeInput from './InvitationCodeInput';
-import JoinRoomButton from './JoinRoomButton';
-import useHandler from '../../hooks/useHandler';
+
 import { InvitationCode } from '@/types/InvitationCode';
-import useInvitationCodeValidation from '@/hooks/useInvitationCodeValidation';
 import { isInvitationCode } from '@/validators/isInvitationCode';
+
+import useHandler from '../../hooks/useHandler';
+import useInvitationCodeValidation from '@/hooks/useInvitationCodeValidation';
+
+import EntryButton from './EntryButton';
+import UserEntryField from './UserEntryField';
+
 import { mainBoxStyle, avatarStyle, typographyStyle, formStyle } from './Entrance.styles';
 
 function Entrance() {
@@ -28,16 +31,26 @@ function Entrance() {
         </Typography>
         <Box component="form" noValidate sx={formStyle}>
           <div>
-            <NicknameInput onChange={setNickname} />
-            <CreateRoomButton onClick={() => void handleCreate(nickname)} disabled={!nickname || !!invitationCode} />
+            <UserEntryField label="닉네임" onChange={setNickname} maxLength={8} name="nickname" required autoFocus />
+            <EntryButton
+              label="방 생성"
+              onClick={() => void handleCreate(nickname)}
+              disabled={!nickname || !!invitationCode}
+            />
           </div>
           <div>
-            <InvitationCodeInput
+            <UserEntryField
+              label="초대 코드"
               onChange={handleInputChange}
               error={!!invitationCode && !isInvitationCodeValid}
               helperText={!isValid ? '유효한 초대 코드가 아닙니다.' : ''}
+              maxLength={6}
+              name="invitationCode"
+              color="success"
             />
-            <JoinRoomButton
+            <EntryButton
+              label="방 참가"
+              buttonColor="success"
               onClick={() => void handleJoin(nickname, invitationCode as InvitationCode)}
               disabled={!(nickname && isInvitationCodeValid)}
             />
