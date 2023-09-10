@@ -1,41 +1,35 @@
-import { selectPlace, selectResultDescription, selectSpy, setResultDescription } from '@/redux/slices/gameSlice';
-import { Alert, Box, Button, Snackbar, Typography } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { Alert, Box, Snackbar, Typography } from '@mui/material';
+
 import FinalVoteTable from './FinalVoteTable';
 import RoleTable from './RoleTable';
-import { selectUser, setUserId } from '@/redux/slices/userSlice';
-import { RESULTS } from '@/constants/results';
-import { useEffect, useState } from 'react';
+
+import useCleanupGame from '@/hooks/useCleanupGame';
 import useHandler from '@/hooks/useHandler';
-import { getAnalytics, logEvent } from 'firebase/analytics';
-import { ref, remove } from 'firebase/database';
-import db from '../../../../firebase/firebase.config';
-import { LOCAL_STORAGE_ID, LOCAL_STORAGE_INVITATION_CODE } from '@/constants/localStorage';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPlace, selectResultDescription, selectSpy, setResultDescription } from '@/redux/slices/gameSlice';
+import { selectUser, setUserId } from '@/redux/slices/userSlice';
+
+import { RESULTS } from '@/constants/results';
+import ResetButtons from './ResetButtons';
 
 export default function Result() {
-  const analytics = getAnalytics();
+  const dispatch = useDispatch();
   const place = useSelector(selectPlace);
   const resultDescription = useSelector(selectResultDescription);
-  const dispatch = useDispatch();
-  const notification = decideNotification(resultDescription);
   const spy = useSelector(selectSpy);
   const myUser = useSelector(selectUser);
   const myId = myUser.id;
   const { invitationCode } = myUser;
+
+  if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');
+
   const [openSnackbar, setOpenSnackbar] = useState(true);
   const { handleRejoin } = useHandler();
   const severity = decideSeverity(resultDescription, spy?.id === myId);
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      localStorage.removeItem(LOCAL_STORAGE_ID);
-      localStorage.removeItem(LOCAL_STORAGE_INVITATION_CODE);
-    }
-    if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');
-    void remove(ref(db, 'games/' + invitationCode));
-    if (spy?.id === myUser.id) {
-      logEvent(analytics, 'GameEnd', { invitationCode });
-    }
-  }, []);
+  const notification = decideNotification(resultDescription);
+  useCleanupGame(invitationCode, spy?.id === myId);
 
   return (
     <Box
@@ -52,29 +46,13 @@ export default function Result() {
       <Typography component="h1" variant="h5">
         {resultDescription}
       </Typography>
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 2,
-          mt: 2,
-        }}>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            dispatch(setUserId(null));
-            dispatch(setResultDescription(''));
-          }}>
-          처음으로
-        </Button>
-        <Button
-          variant="outlined"
-          color="success"
-          onClick={() => {
-            void handleRejoin(myUser);
-          }}>
-          다시 하기
-        </Button>
-      </Box>
+      <ResetButtons
+        onReset={() => {
+          dispatch(setUserId(null));
+          dispatch(setResultDescription(''));
+        }}
+        onRejoin={() => void handleRejoin(myUser)}
+      />
       <Typography sx={{ mt: 3 }} component="h1" variant="h5">
         장소: {place}
       </Typography>
@@ -102,8 +80,8 @@ const decideNotification = (resultDescription: string) => {
   }
 };
 
-const decideSeverity = (setResultDescription: string, amSpy: boolean) => {
+const decideSeverity = (resultDescription: string, amSpy: boolean) => {
   const { spyWin } = RESULTS;
-  const wonBySpy = Object.values(spyWin).includes(setResultDescription);
+  const wonBySpy = Object.values(spyWin).includes(resultDescription);
   return (wonBySpy && amSpy) || (!wonBySpy && !amSpy) ? 'success' : 'error';
 };
