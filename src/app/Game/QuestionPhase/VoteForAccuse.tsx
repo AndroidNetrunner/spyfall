@@ -2,28 +2,38 @@ import { useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Alert, AlertTitle, Box } from '@mui/material';
 
-import useHandler from '@/hooks/useHandler';
+import useHandler from '@/app/hooks/useHandler';
 
 import { selectInvitationCode, selectPlayers, selectSpy } from '@/redux/slices/gameSlice';
-import { selectNominator, selectNominee } from '@/redux/slices/questionPhaseSlice';
-import { selectId } from '@/redux/slices/userSlice';
+import { selectNominator, selectNominee, selectVotes } from '@/redux/slices/questionPhaseSlice';
+import { UserState, selectId } from '@/redux/slices/userSlice';
 
 import { UserId } from '@/types/UserId';
-import VoteButtonForAccuse from './VoteButtonForAccuse';
+import PlayersWhoDidNotVote from '@/app/components/PlayersWhoDidNotVote';
+import { NO_VOTE_YET, Vote } from '@/types/Vote';
+import Players from '@/types/Players';
+import VotingSection from './VotingSection';
 
 export default function VoteForAccuse() {
   const nomineeId = useSelector(selectNominee);
   const nominatorId = useSelector(selectNominator);
   const invitationCode = useSelector(selectInvitationCode);
   const players = useSelector(selectPlayers);
+  const votes = useSelector(selectVotes);
   const spy = useSelector(selectSpy);
-  if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');
   const myUserId = useSelector(selectId);
-  if (!myUserId) throw new Error('유저 id가 존재하지 않음');
+
+  if (!votes) throw new Error('투표 데이터가 존재하지 않음');
+  if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');
+  if (!myUserId) throw new Error('유저 데이터가 존재하지 않음');
+
   const nominee = players[nomineeId as UserId];
   const nominator = players[nominatorId as UserId];
+  const unvotedOpponents = getUnvotedPlayerNicknames(players, votes);
+
   const { handleAccusationVote } = useHandler();
   const [hasVote, setHasVote] = useState(nomineeId !== myUserId);
+
   const handleVoteClick = useCallback(
     (isSpy: boolean) => {
       setHasVote(false);
@@ -39,18 +49,16 @@ export default function VoteForAccuse() {
         고발자: {nominator?.nickname}
       </Alert>
       {hasVote ? (
-        <>
-          <Box display="flex" justifyContent="center">
-            {nominee?.nickname}님은 스파이인가요?
-          </Box>
-          <Box display="flex" justifyContent="center">
-            <VoteButtonForAccuse isSpy={true} onClick={handleVoteClick} />
-            <VoteButtonForAccuse isSpy={false} onClick={handleVoteClick} />
-          </Box>
-        </>
+        <VotingSection nominee={nominee} handleVoteClick={handleVoteClick} />
       ) : (
-        <></>
+        <PlayersWhoDidNotVote unvotedOpponents={unvotedOpponents} />
       )}
     </Box>
   );
 }
+
+const getUnvotedPlayerNicknames = (players: Players, votes: Vote): string =>
+  Object.values(players)
+    .filter((player: UserState) => player.id && votes[player.id] === NO_VOTE_YET)
+    .map((player: UserState) => player.nickname)
+    .join(', ');
