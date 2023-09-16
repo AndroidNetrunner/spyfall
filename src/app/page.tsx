@@ -4,9 +4,9 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { get, ref } from 'firebase/database';
 
-import Entrance from '../components/Entrance/Entrance';
-import Lobby from '../components/Lobby/Lobby';
-import Game from '@/components/Game/Game';
+import Entrance from './Entrance/Entrance';
+import Lobby from './Lobby/Lobby';
+import Game from './Game/Game';
 
 import { enterRoomByInvitationCode, selectUser, setUserId } from '../redux/slices/userSlice';
 import { selectInvitationCode } from '@/redux/slices/roomSlice';

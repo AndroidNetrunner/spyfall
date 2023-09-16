@@ -38,7 +38,7 @@ export default function VoteForAccuse() {
         <AlertTitle>{nominee?.nickname}님이 고발당하였습니다!</AlertTitle>
         고발자: {nominator?.nickname}
       </Alert>
-      {hasVote && (
+      {hasVote ? (
         <>
           <Box display="flex" justifyContent="center">
             {nominee?.nickname}님은 스파이인가요?
@@ -48,6 +48,8 @@ export default function VoteForAccuse() {
             <VoteButtonForAccuse isSpy={false} onClick={handleVoteClick} />
           </Box>
         </>
+      ) : (
+        <></>
       )}
     </Box>
   );
