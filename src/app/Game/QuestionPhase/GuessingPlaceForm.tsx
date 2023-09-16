@@ -4,10 +4,9 @@ import { useSelector } from 'react-redux';
 
 import { Place } from '@/constants/places';
 
-import useHandler from '@/hooks/useHandler';
+import useHandler from '@/app/hooks/useHandler';
 
 import { selectAvailablePlaces, selectInvitationCode } from '@/redux/slices/gameSlice';
-
 
 const textFieldStyles = {
   width: {
@@ -46,12 +45,7 @@ export default function GuessingPlaceForm() {
           value={selectedPlace}
           onChange={handleChange}
           renderInput={params => (
-            <TextField
-              sx={textFieldStyles}
-              {...params}
-              label="맞힐 장소를 선택하세요."
-              variant="outlined"
-            />
+            <TextField sx={textFieldStyles} {...params} label="맞힐 장소를 선택하세요." variant="outlined" />
           )}
           options={availablePlaces}
         />

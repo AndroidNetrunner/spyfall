@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserId, enterRoomByInvitationCode, setNickname, UserState } from '../redux/slices/userSlice';
-import db from '../../firebase/firebase.config';
+import { setUserId, enterRoomByInvitationCode, setNickname, UserState } from '../../redux/slices/userSlice';
+import db from '../../../firebase/firebase.config';
 import { InvitationCode } from '@/types/InvitationCode';
 import { UserId } from '@/types/UserId';
 import { setInvitationCode, setPlayers } from '@/redux/slices/roomSlice';
@@ -14,7 +14,7 @@ import { ref, get, set, runTransaction, update } from 'firebase/database';
 import { RoomData } from '@/types/Data';
 import GameData from '@/types/GameData';
 import Players from '@/types/Players';
-import createNewGame from '../utils/createNewGame';
+import createNewGame from '../../utils/createNewGame';
 import { LOCAL_STORAGE_ID, LOCAL_STORAGE_INVITATION_CODE } from '@/constants/localStorage';
 
 const useHandler = () => {

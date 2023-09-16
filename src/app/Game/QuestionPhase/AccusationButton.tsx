@@ -1,4 +1,4 @@
-import useHandler from '@/hooks/useHandler';
+import useHandler from '@/app/hooks/useHandler';
 import { selectPlayers } from '@/redux/slices/gameSlice';
 import { UserState, selectId, selectUser } from '@/redux/slices/userSlice';
 import { UserId } from '@/types/UserId';

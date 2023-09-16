@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { ref, remove } from 'firebase/database';
 import { getAnalytics, logEvent } from 'firebase/analytics';
-import { LOCAL_STORAGE_ID, LOCAL_STORAGE_INVITATION_CODE } from '../constants/localStorage';
-import db from '../../firebase/firebase.config';
+import { LOCAL_STORAGE_ID, LOCAL_STORAGE_INVITATION_CODE } from '../../constants/localStorage';
+import db from '../../../firebase/firebase.config';
 
 const useCleanupGame = (invitationCode: string, isSpy: boolean) => {
   useEffect(() => {

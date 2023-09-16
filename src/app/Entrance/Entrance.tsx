@@ -8,8 +8,8 @@ import Avatar from '@mui/material/Avatar';
 import { InvitationCode } from '@/types/InvitationCode';
 import { isInvitationCode } from '@/validators/isInvitationCode';
 
-import useHandler from '../../hooks/useHandler';
-import useInvitationCodeValidation from '@/hooks/useInvitationCodeValidation';
+import useHandler from '../hooks/useHandler';
+import useInvitationCodeValidation from '@/app/hooks/useInvitationCodeValidation';
 
 import EntryButton from './EntryButton';
 import UserEntryField from './UserEntryField';

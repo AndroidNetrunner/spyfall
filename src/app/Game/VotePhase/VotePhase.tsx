@@ -1,7 +1,7 @@
 import Result from '../Result/Result';
 import VoteForm from './VoteForm';
-import PlayersWhoDidNotVote from './PlayersWhoDidNotVote';
-import { useVotePhase } from '@/hooks/useVoteState';
+import PlayersWhoDidNotVote from '../../components/PlayersWhoDidNotVote';
+import { useVotePhase } from '@/app/hooks/useVoteState';
 import { useState } from 'react';
 
 export default function VotePhase() {

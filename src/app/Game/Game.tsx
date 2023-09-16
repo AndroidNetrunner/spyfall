@@ -1,9 +1,9 @@
 import { Box, Container } from '@mui/material';
-import useGameStartSync from '@/hooks/useGameStartSync';
+import useGameStartSync from '@/app/hooks/useGameStartSync';
 import { useSelector } from 'react-redux';
 import { selectSpy } from '@/redux/slices/gameSlice';
 import RoleInfo from './RoleInfo/RoleInfo';
-import useGameRenderer from '@/hooks/useGameRenderer';
+import useGameRenderer from '@/app/hooks/useGameRenderer';
 import ForceQuitButton from './ForceQuitButton';
 
 export default function Game() {

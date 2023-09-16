@@ -1,4 +1,4 @@
-import useHandler from '@/hooks/useHandler';
+import useHandler from '@/app/hooks/useHandler';
 import { selectInvitationCode, selectPlayers } from '@/redux/slices/roomSlice';
 import Players from '@/types/Players';
 import { Alert, Box, Button } from '@mui/material';

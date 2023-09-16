@@ -8,12 +8,11 @@ import GuessingPlaceForm from './GuessingPlaceForm';
 import Timer from './Timer';
 import VoteForAccuse from './VoteForAccuse';
 
-import useSnackbarState from '@/hooks/useSnackbarState';
+import useSnackbarState from '@/app/hooks/useSnackbarState';
 
 import { selectId } from '@/redux/slices/userSlice';
 import { selectNominator } from '@/redux/slices/questionPhaseSlice';
 import { selectSpy } from '@/redux/slices/gameSlice';
-
 
 export default function QuestionPhase() {
   const [openedSnackbar, setOpenedSnackbar] = useSnackbarState();

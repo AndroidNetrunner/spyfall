@@ -1,4 +1,4 @@
-import useInterval from '@/hooks/useInterval';
+import useInterval from '@/app/hooks/useInterval';
 import { selectTimer, selectVotes, setTimer } from '@/redux/slices/questionPhaseSlice';
 import { Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';

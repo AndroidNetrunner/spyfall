@@ -1,4 +1,4 @@
-import useHandler from '@/hooks/useHandler';
+import useHandler from '@/app/hooks/useHandler';
 import { Button } from '@mui/material';
 
 export default function ForceQuitButton() {

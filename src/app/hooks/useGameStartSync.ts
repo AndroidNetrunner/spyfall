@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ref, onValue, remove } from 'firebase/database';
 
-import db from '../../firebase/firebase.config';
+import db from '../../../firebase/firebase.config';
 import { selectUser } from '@/redux/slices/userSlice';
 import { resetGame, setGame, setResultDescription } from '@/redux/slices/gameSlice';
 import { setFinalVotes } from '@/redux/slices/votePhaseSlice';

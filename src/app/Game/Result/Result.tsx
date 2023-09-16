@@ -4,8 +4,8 @@ import { Alert, Box, Snackbar, Typography } from '@mui/material';
 import FinalVoteTable from './FinalVoteTable';
 import RoleTable from './RoleTable';
 
-import useCleanupGame from '@/hooks/useCleanupGame';
-import useHandler from '@/hooks/useHandler';
+import useCleanupGame from '@/app/hooks/useCleanupGame';
+import useHandler from '@/app/hooks/useHandler';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectPlace, selectResultDescription, selectSpy, setResultDescription } from '@/redux/slices/gameSlice';
