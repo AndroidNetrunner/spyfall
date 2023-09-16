@@ -31,7 +31,7 @@ function Entrance() {
         </Typography>
         <Box component="form" noValidate sx={formStyle}>
           <div>
-            <UserEntryField label="닉네임" onChange={setNickname} maxLength={8} name="nickname" required autoFocus />
+            <UserEntryField label="닉네임" handler={setNickname} maxLength={8} name="nickname" required autoFocus />
             <EntryButton
               label="방 생성"
               onClick={() => void handleCreate(nickname)}
@@ -41,7 +41,7 @@ function Entrance() {
           <div>
             <UserEntryField
               label="초대 코드"
-              onChange={handleInputChange}
+              handler={handleInputChange}
               error={!!invitationCode && !isInvitationCodeValid}
               helperText={!isValid ? '유효한 초대 코드가 아닙니다.' : ''}
               maxLength={6}
