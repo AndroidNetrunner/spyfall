@@ -2,7 +2,7 @@ import { TextField } from '@mui/material';
 
 interface CustomInputProps {
   label: string;
-  onChange: (value: string) => void;
+  handler: (value: string) => void;
   error?: boolean;
   helperText?: string;
   maxLength?: number;
@@ -14,7 +14,7 @@ interface CustomInputProps {
 
 export default function UserEntryFIeld({
   label,
-  onChange,
+  handler,
   error = false,
   helperText = '',
   maxLength,
@@ -34,7 +34,7 @@ export default function UserEntryFIeld({
       label={label}
       required={required}
       autoFocus={autoFocus}
-      onChange={event => onChange(event.target.value)}
+      onChange={event => handler(event.target.value)}
     />
   );
 }

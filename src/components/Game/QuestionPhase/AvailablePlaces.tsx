@@ -5,26 +5,13 @@ import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { selectedCellStyle, defaultCellStyle, hintCellStyleSx } from './AvailablePlaces.styles';
 
+const COLSPANS = 2;
+
 export default function AvailablePlaces() {
   const availablePlaces = useSelector(selectAvailablePlaces);
   const [selectedPlaces, setSelectedPlaces] = useState<Set<Place>>(new Set());
 
-  const COLSPANS = 2;
-
-  const renderTableCell = (place?: Place) => (
-    <TableCell
-      component="th"
-      scope="row"
-      sx={{
-        ...(place && selectedPlaces.has(place) ? selectedCellStyle : defaultCellStyle),
-      }}
-      onClick={() => place && toggleSelectedPlace(place)}>
-      {place || ''}
-    </TableCell>
-  );
-
   const isPlaceSelected = (place: Place): boolean => selectedPlaces.has(place);
-
   const toggleSelectedPlace = (place: Place) => {
     const newSelectedPlaces = new Set(selectedPlaces);
 
@@ -37,9 +24,36 @@ export default function AvailablePlaces() {
     setSelectedPlaces(newSelectedPlaces);
   };
 
+  const getTableCell = (place?: Place) => (
+    <TableCell
+      component="th"
+      scope="row"
+      sx={{
+        ...(place && selectedPlaces.has(place) ? selectedCellStyle : defaultCellStyle),
+      }}
+      onClick={() => place && toggleSelectedPlace(place)}>
+      {place || ''}
+    </TableCell>
+  );
+  const getTableBody = (availablePlaces: Place[]) => {
+    const rows = splitPlacesIntoRows(availablePlaces);
+
+    return rows.map(row => (
+      <TableRow key={row[0]}>
+        {getTableCell(row[0])}
+        {getTableCell(row[1])}
+      </TableRow>
+    ));
+  };
+
+  const splitPlacesIntoRows = (availablePlaces: Place[]): [Place, Place][] =>
+    Array.from({ length: Math.ceil(availablePlaces.length / COLSPANS) }).map((_, idx) => {
+      return [availablePlaces[2 * idx], availablePlaces[2 * idx + 1]];
+    });
+
   return (
     <>
-      {availablePlaces && (
+      {availablePlaces ? (
         <TableContainer>
           <Table aria-label="simple table">
             <TableHead>
@@ -54,21 +68,10 @@ export default function AvailablePlaces() {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {Array.from({ length: Math.ceil(availablePlaces.length / COLSPANS) }).map((_, idx) => {
-                const firstPlace = availablePlaces[2 * idx];
-                const secondPlace = availablePlaces[2 * idx + 1];
-                return (
-                  <TableRow key={firstPlace}>
-                    {renderTableCell(firstPlace)}
-                    {renderTableCell(secondPlace)}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
+            <TableBody>{getTableBody(availablePlaces)}</TableBody>
           </Table>
         </TableContainer>
-      )}
+      ): null}
     </>
   );
 }

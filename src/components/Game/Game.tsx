@@ -10,6 +10,7 @@ export default function Game() {
   const spy = useSelector(selectSpy);
   const Phase = useGameRenderer();
   useGameStartSync();
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -21,9 +22,9 @@ export default function Game() {
           justifyContent: 'center',
         }}>
         <Box sx={{ alignSelf: 'flex-start' }}>
-          {/* 화면의 왼쪽에 ForceQuitButton을 배치하고 싶음. */}
           <ForceQuitButton />
         </Box>
+        {/* 스파이의 데이터를 받아온 후 RoleInfo를 렌더링 */}
         {spy && <RoleInfo />}
         <Phase />
       </Box>
