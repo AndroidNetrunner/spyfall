@@ -32,5 +32,5 @@ export default function GameStartButton() {
 }
 
 function isAbleToStartGame(players: Players): boolean {
-  return Object.values(players).length >= 3 && Object.values(players).length <= 8;
+  return Object.values(players).length >= 3 && Object.values(players).length <= 12;
 }

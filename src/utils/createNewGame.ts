@@ -6,9 +6,11 @@ import { UserId } from '@/types/UserId';
 import { GameState } from '@/redux/slices/gameSlice';
 import Players from '@/types/Players';
 
+const NUMBER_OF_PLACES = 20;
+
 const createNewGame = (invitationCode: InvitationCode, players: Players): GameState => {
-  const place = chooseRandomPlace();
-  const availablePlaces = makeAvailablePlaces(place);
+  const [place, possiblePlaces] = chooseRandomPlace(players);
+  const availablePlaces = makeAvailablePlaces(place, possiblePlaces);
   const playersArray = Object.values(players) as UserState[];
   const spy = playersArray[Math.floor(Math.random() * playersArray.length)];
   const citizens = playersArray.filter(player => player.id !== spy.id);
@@ -24,9 +26,9 @@ const createNewGame = (invitationCode: InvitationCode, players: Players): GameSt
   };
 };
 
-const makeAvailablePlaces = (place: Place): Place[] => {
-  const allPlaces = shuffleStringArray(Object.keys(ROLES_BY_PLACE)).filter(availablePlace => place != availablePlace);
-  return shuffleStringArray(allPlaces.slice(0, 19).concat(place)) as Place[];
+const makeAvailablePlaces = (place: Place, possiblePlaces: Place[]): Place[] => {
+  const allPlaces = possiblePlaces.filter(availablePlace => place != availablePlace);
+  return shuffleStringArray(allPlaces.slice(0, NUMBER_OF_PLACES - 1).concat(place)) as Place[];
 };
 
 const decideRoleOfCitizens = (players: UserState[], roles: string[]): { [key: string]: string } => {
@@ -38,9 +40,12 @@ const decideRoleOfCitizens = (players: UserState[], roles: string[]): { [key: st
   }, {});
 };
 
-const chooseRandomPlace = (): Place => {
-  const places = Object.keys(ROLES_BY_PLACE);
-  return places[Math.floor(Math.random() * places.length)] as keyof typeof ROLES_BY_PLACE;
+const chooseRandomPlace = (players: Players): [Place, Place[]] => {
+  const numberOfPlayers = Object.keys(players).length;
+  const possiblePlaces = Object.keys(ROLES_BY_PLACE).filter(
+    place => ROLES_BY_PLACE[place as Place].length >= numberOfPlayers,
+  ) as Place[];
+  return [possiblePlaces[Math.floor(Math.random() * numberOfPlayers)], possiblePlaces];
 };
 
 export default createNewGame;
