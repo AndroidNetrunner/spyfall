@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -15,12 +15,19 @@ import EntryButton from './EntryButton';
 import UserEntryField from './UserEntryField';
 
 import { mainBoxStyle, avatarStyle, typographyStyle, formStyle } from './Entrance.styles';
+import { useDispatch } from 'react-redux';
+import { setIsGameMaster } from '@/redux/slices/roomSlice';
 
 function Entrance() {
+  const dispatch = useDispatch();
   const [nickname, setNickname] = useState('');
   const { handleCreate, handleJoin } = useHandler();
   const { invitationCode, isValid, handleInputChange } = useInvitationCodeValidation();
   const isInvitationCodeValid = isInvitationCode(invitationCode);
+
+  useEffect(() => {
+    dispatch(setIsGameMaster(false));
+  }, []);
 
   return (
     <Container component="main" maxWidth="xs">

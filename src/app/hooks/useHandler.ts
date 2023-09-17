@@ -3,7 +3,7 @@ import { setUserId, enterRoomByInvitationCode, setNickname, UserState } from '..
 import db from '../../../firebase/firebase.config';
 import { InvitationCode } from '@/types/InvitationCode';
 import { UserId } from '@/types/UserId';
-import { setInvitationCode, setPlayers } from '@/redux/slices/roomSlice';
+import { setInvitationCode, setIsGameMaster, setPlayers } from '@/redux/slices/roomSlice';
 import { selectSpy } from '@/redux/slices/gameSlice';
 import { Place } from '@/constants/places';
 import { NO_VOTE_YET, Vote } from '@/types/Vote';
@@ -46,6 +46,7 @@ const useHandler = () => {
         [id]: myUser,
       }),
     );
+    dispatch(setIsGameMaster(true));
   };
 
   const dispatchUserDetails = (myUser: UserState) => {
@@ -55,7 +56,6 @@ const useHandler = () => {
     dispatch(setNickname(myUser.nickname));
   };
 
-  // BUG: 초대 코드를 잘못 입력할 경우, Lobby가 렌더링된 후 alert가 실행됨.
   const handleJoin = async (nickname: string, invitationCode: InvitationCode) => {
     const roomRef = ref(db, 'rooms/' + invitationCode);
     const myUser = {
