@@ -27,8 +27,8 @@ const createNewGame = (invitationCode: InvitationCode, players: Players): GameSt
 };
 
 const makeAvailablePlaces = (place: Place, possiblePlaces: Place[]): Place[] => {
-  const allPlaces = possiblePlaces.filter(availablePlace => place != availablePlace);
-  return shuffleStringArray(allPlaces.slice(0, NUMBER_OF_PLACES - 1).concat(place)) as Place[];
+  const otherPlaces = possiblePlaces.filter(availablePlace => place != availablePlace);
+  return shuffleStringArray(otherPlaces.slice(0, NUMBER_OF_PLACES - 1).concat(place)) as Place[];
 };
 
 const decideRoleOfCitizens = (players: UserState[], roles: string[]): { [key: string]: string } => {
