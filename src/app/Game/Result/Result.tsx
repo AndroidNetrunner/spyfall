@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Box, Snackbar, Typography } from '@mui/material';
 
 import FinalVoteTable from './FinalVoteTable';
 import RoleTable from './RoleTable';
 
-import useCleanupGame from '@/app/hooks/useCleanupGame';
 import useHandler from '@/app/hooks/useHandler';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +12,7 @@ import { selectUser, setUserId } from '@/redux/slices/userSlice';
 
 import { RESULTS } from '@/constants/results';
 import ResetButtons from './ResetButtons';
+import { cleanupGame } from '@/utils/cleanupGame';
 
 export default function Result() {
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ export default function Result() {
   const { handleRejoin } = useHandler();
   const severity = decideSeverity(resultDescription, spy?.id === myId);
   const notification = decideNotification(resultDescription);
-  useCleanupGame(invitationCode, spy?.id === myId);
+  useEffect(() => cleanupGame(invitationCode, spy?.id === myId), []);
 
   return (
     <Box

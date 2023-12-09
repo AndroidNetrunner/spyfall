@@ -6,7 +6,7 @@ import db from '../../../firebase/firebase.config';
 import { selectUser } from '@/redux/slices/userSlice';
 import { resetGame, setGame, setResultDescription } from '@/redux/slices/gameSlice';
 import { setFinalVotes } from '@/redux/slices/votePhaseSlice';
-import { resetQuestionPhase, setNominator, setNominee, setTimer, setVotes } from '@/redux/slices/questionPhaseSlice';
+import { resetQuestionPhase, setNominator, setNominee, setVotes } from '@/redux/slices/questionPhaseSlice';
 import isGameData from '@/validators/isGameData';
 import GameData from '@/types/GameData';
 import { LOCAL_STORAGE_ID, LOCAL_STORAGE_INVITATION_CODE } from '@/constants/localStorage';
@@ -21,7 +21,6 @@ export default function useGameStartSync() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setTimer(8 * 60));
     if (typeof window !== undefined) {
       localStorage.setItem(LOCAL_STORAGE_ID, id);
       localStorage.setItem(LOCAL_STORAGE_INVITATION_CODE, invitationCode);

@@ -1,14 +1,24 @@
 import useInterval from '@/app/hooks/useInterval';
+import { LOCAL_STORAGE_END_TIME } from '@/constants/localStorage';
 import { selectTimer, selectVotes, setTimer } from '@/redux/slices/questionPhaseSlice';
 import { Box } from '@mui/material';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-// TODO: 고발 발생 시 타이머 멈추도록 설정
 
 export default function Timer() {
   const timer = useSelector(selectTimer);
   const votes = useSelector(selectVotes);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!localStorage.getItem(LOCAL_STORAGE_END_TIME)) {
+      const gameEndTime = Date.now() + 8 * 60 * 1000;
+      localStorage.setItem(LOCAL_STORAGE_END_TIME, gameEndTime.toString());
+    }
+    const currentEndTime = localStorage.getItem(LOCAL_STORAGE_END_TIME);
+    if (!currentEndTime) return;
+    dispatch(setTimer((parseInt(currentEndTime, 10) - Date.now()) / 1000));
+  }, []);
 
   useInterval(() => {
     if (!votes) dispatch(setTimer(timer > 0 ? timer - 1 : 0));

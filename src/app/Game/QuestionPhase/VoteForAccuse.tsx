@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Alert, AlertTitle, Box } from '@mui/material';
 
@@ -13,6 +13,7 @@ import PlayersWhoDidNotVote from '@/app/components/PlayersWhoDidNotVote';
 import { NO_VOTE_YET, Vote } from '@/types/Vote';
 import Players from '@/types/Players';
 import VotingSection from './VotingSection';
+import { LOCAL_STORAGE_END_TIME, LOCAL_STORAGE_PAUSE_START_TIME } from '@/constants/localStorage';
 
 export default function VoteForAccuse() {
   const nomineeId = useSelector(selectNominee);
@@ -42,6 +43,11 @@ export default function VoteForAccuse() {
     [invitationCode, myUserId, spy],
   );
 
+  useEffect(() => {
+    startPause();
+    return endPause;
+  }, []);
+
   return (
     <Box sx={{ mt: 3 }}>
       <Alert severity="warning">
@@ -62,3 +68,27 @@ const getUnvotedPlayerNicknames = (players: Players, votes: Vote): string =>
     .filter((player: UserState) => player.id && votes[player.id] === NO_VOTE_YET)
     .map((player: UserState) => player.nickname)
     .join(', ');
+
+const startPause = () => {
+  const startTime = Date.now();
+  localStorage.setItem(LOCAL_STORAGE_PAUSE_START_TIME, startTime.toString());
+};
+
+const endPause = () => {
+  const pauseStartTimeStr = localStorage.getItem(LOCAL_STORAGE_PAUSE_START_TIME);
+  if (!pauseStartTimeStr) return;
+
+  const pauseStartTime = parseInt(pauseStartTimeStr, 10);
+  const durationPaused = Date.now() - pauseStartTime;
+  extendEndTime(durationPaused);
+  localStorage.removeItem(LOCAL_STORAGE_PAUSE_START_TIME);
+};
+
+const extendEndTime = (duration: number) => {
+  const gameEndTimeStr = localStorage.getItem(LOCAL_STORAGE_END_TIME);
+  if (!gameEndTimeStr) return;
+
+  const currentEndTime = parseInt(gameEndTimeStr, 10);
+  const newEndTime = currentEndTime + duration;
+  localStorage.setItem(LOCAL_STORAGE_END_TIME, newEndTime.toString());
+};

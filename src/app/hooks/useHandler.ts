@@ -15,7 +15,7 @@ import { RoomData } from '@/types/Data';
 import GameData from '@/types/GameData';
 import Players from '@/types/Players';
 import createNewGame from '../../utils/createNewGame';
-import { LOCAL_STORAGE_ID, LOCAL_STORAGE_INVITATION_CODE } from '@/constants/localStorage';
+import { cleanupGame } from '@/utils/cleanupGame';
 
 const useHandler = () => {
   if (!db) throw new Error();
@@ -232,11 +232,10 @@ const useHandler = () => {
     }
   };
 
-  const handleQuit = () => {
+  const handleQuit = (invitationCode: string, isSpy: boolean) => {
     const isConfirmed = window.confirm('정말로 강제 종료하시겠습니까?');
     if (isConfirmed && typeof window !== undefined) {
-      localStorage.removeItem(LOCAL_STORAGE_ID);
-      localStorage.removeItem(LOCAL_STORAGE_INVITATION_CODE);
+      cleanupGame(invitationCode, isSpy);
       dispatch(setUserId(null));
       dispatch(enterRoomByInvitationCode(null));
     }
