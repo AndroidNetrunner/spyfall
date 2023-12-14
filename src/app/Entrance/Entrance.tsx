@@ -39,11 +39,6 @@ function Entrance() {
         <Box component="form" noValidate sx={formStyle}>
           <div>
             <UserEntryField label="닉네임" handler={setNickname} maxLength={8} name="nickname" required autoFocus />
-            <EntryButton
-              label="방 생성"
-              onClick={() => void handleCreate(nickname)}
-              disabled={!nickname || !!invitationCode}
-            />
           </div>
           <div>
             <UserEntryField
@@ -55,8 +50,17 @@ function Entrance() {
               name="invitationCode"
               color="success"
             />
+          </div>
+          <div>
+            <EntryButton
+              label="방 생성"
+              sx={{ mr: 3, mt: 3 }}
+              onClick={() => void handleCreate(nickname)}
+              disabled={!nickname || !!invitationCode}
+            />
             <EntryButton
               label="방 참가"
+              sx={{ ml: 3, mt: 3 }}
               buttonColor="success"
               onClick={() => void handleJoin(nickname, invitationCode as InvitationCode)}
               disabled={!(nickname && isInvitationCodeValid)}

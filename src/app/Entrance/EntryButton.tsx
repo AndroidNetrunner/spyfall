@@ -7,7 +7,7 @@ interface EntryButtonProps extends ButtonProps {
 
 export default function EntryButton({ label, buttonColor = 'primary', ...props }: EntryButtonProps) {
   return (
-    <Button variant="outlined" color={buttonColor} sx={{ ml: 3, mt: 3, mb: 2 }} {...props}>
+    <Button variant="outlined" color={buttonColor} sx={{ mt: 3 }} {...props}>
       {label}
     </Button>
   );
