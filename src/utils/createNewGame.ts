@@ -45,7 +45,7 @@ const chooseRandomPlace = (players: Players): [Place, Place[]] => {
   const possiblePlaces = Object.keys(ROLES_BY_PLACE).filter(
     place => ROLES_BY_PLACE[place as Place].length >= numberOfPlayers,
   ) as Place[];
-  return [possiblePlaces[Math.floor(Math.random() * numberOfPlayers)], possiblePlaces];
+  return [possiblePlaces[Math.floor(Math.random() * possiblePlaces.length)], possiblePlaces];
 };
 
 export default createNewGame;
