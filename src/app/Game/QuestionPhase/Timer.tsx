@@ -25,7 +25,7 @@ export default function Timer() {
   }, 1000);
 
   const minutes = Math.floor(timer / 60);
-  const seconds = timer % 60;
+  const seconds = Math.floor(timer % 60);
 
   return (
     <Box sx={{ color: votes ? 'gray' : 'white' }} display="flex" justifyContent="center">
