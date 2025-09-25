@@ -22,18 +22,6 @@ export default function Lobby() {
     const userRef = ref(db, 'rooms/' + invitationCode + '/players/' + myUserId);
     void onDisconnect(userRef).remove();
   }, []);
-  useEffect(() => {
-    if (!invitationCode) return;
-    const roomRef = ref(db, 'rooms/' + invitationCode);
-    const unsubscribe = onValue(roomRef, (snapshot) => {
-      const roomData = snapshot.val();
-      if (roomData && roomData.status === 'playing')
-        router.push(`/game/${invitationCode}`);
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, [invitationCode, router]);
   return (
     <Container component="main" maxWidth="xs">
       <Box

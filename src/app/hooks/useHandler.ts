@@ -74,20 +74,18 @@ const useHandler = () => {
   };
 
   const handleStartGame = async (invitationCode: InvitationCode, players: Players) => {
-    try {
-      const gameDocRef = ref(db, 'games/' + invitationCode);
-      await runTransaction(gameDocRef, (currentData: GameData) => {
-        if (currentData) return;
-        return createNewGame(invitationCode, players);
-      });
-
-      const roomDocRef = ref(db, 'rooms/' + invitationCode);
-      await update(roomDocRef, { status: 'playing' });
-
-    } catch (error) {
-      console.error("게임을 시작하는 중 오류가 발생했습니다:", error);
-      alert("오류가 발생하여 게임을 시작할 수 없습니다.");
-    }
+    const gameDocRef = ref(db, 'games/' + invitationCode);
+    await runTransaction(gameDocRef, (currentData: GameData) => {
+      if (!currentData) {
+        const newGame = createNewGame(invitationCode, players);
+        return newGame;
+      }
+    });
+    const roomDocRef = ref(db, 'rooms/' + invitationCode);
+    await runTransaction(roomDocRef, (currentData: RoomData) => {
+      if (!currentData) return undefined;
+      return null;
+    });
   };
 
   const handleAccuse = async (
