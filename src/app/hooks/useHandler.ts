@@ -16,6 +16,7 @@ import GameData from '@/types/GameData';
 import Players from '@/types/Players';
 import createNewGame from '../../utils/createNewGame';
 import { cleanupGame } from '@/utils/cleanupGame';
+import { LOCAL_STORAGE_ID, LOCAL_STORAGE_INVITATION_CODE } from '@/constants/localStorage';
 
 const useHandler = () => {
   if (!db) throw new Error();
@@ -47,6 +48,8 @@ const useHandler = () => {
       }),
     );
     dispatch(setIsGameMaster(true));
+    localStorage.setItem(LOCAL_STORAGE_ID, id);
+    localStorage.setItem(LOCAL_STORAGE_INVITATION_CODE, invitationCode);
   };
 
   const dispatchUserDetails = (myUser: UserState) => {
@@ -70,6 +73,8 @@ const useHandler = () => {
       return;
     }
     dispatchUserDetails(myUser);
+    localStorage.setItem(LOCAL_STORAGE_ID, myUser.id);
+    localStorage.setItem(LOCAL_STORAGE_INVITATION_CODE, invitationCode);
     await update(userRef, myUser);
   };
 

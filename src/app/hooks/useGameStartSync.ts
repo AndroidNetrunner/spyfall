@@ -9,7 +9,6 @@ import { setFinalVotes } from '@/redux/slices/votePhaseSlice';
 import { resetQuestionPhase, setNominator, setNominee, setVotes } from '@/redux/slices/questionPhaseSlice';
 import isGameData from '@/validators/isGameData';
 import GameData from '@/types/GameData';
-import { LOCAL_STORAGE_ID, LOCAL_STORAGE_INVITATION_CODE } from '@/constants/localStorage';
 
 export default function useGameStartSync() {
   const { invitationCode, id } = useSelector(selectUser);
@@ -21,10 +20,6 @@ export default function useGameStartSync() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (typeof window !== undefined) {
-      localStorage.setItem(LOCAL_STORAGE_ID, id);
-      localStorage.setItem(LOCAL_STORAGE_INVITATION_CODE, invitationCode);
-    }
     const unsubscribe = onValue(gameRef, snapshot => {
       const currentData = snapshot.val() as GameData;
       if (isGameData(currentData)) {

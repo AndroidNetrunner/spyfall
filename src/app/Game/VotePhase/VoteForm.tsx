@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useSelector } from 'react-redux';
-import { selectInvitationCode, selectPlayers } from '@/redux/slices/gameSlice';
-import { UserState, selectId } from '@/redux/slices/userSlice';
+import { selectPlayers } from '@/redux/slices/gameSlice';
+import { UserState, selectId, selectUser } from '@/redux/slices/userSlice';
 import useHandler from '@/app/hooks/useHandler';
 
 import VoteButton from './VoteButton';
@@ -16,7 +16,7 @@ interface Props {
 
 const VoteForm = ({ votedTo, setVotedTo, setHasVote }: Props) => {
   const myUserId = useSelector(selectId);
-  const invitationCode = useSelector(selectInvitationCode);
+  const { invitationCode } = useSelector(selectUser);
   const opponents = Object.values(useSelector(selectPlayers)).filter((player: UserState) => player.id !== myUserId);
   if (!myUserId) throw new Error('UserID가 존재하지 않음');
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');

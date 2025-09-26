@@ -4,9 +4,9 @@ import { Alert, AlertTitle, Box } from '@mui/material';
 
 import useHandler from '@/app/hooks/useHandler';
 
-import { selectInvitationCode, selectPlayers, selectSpy } from '@/redux/slices/gameSlice';
+import { selectPlayers, selectSpy } from '@/redux/slices/gameSlice';
 import { selectNominator, selectNominee, selectVotes } from '@/redux/slices/questionPhaseSlice';
-import { UserState, selectId } from '@/redux/slices/userSlice';
+import { UserState, selectId, selectUser } from '@/redux/slices/userSlice';
 
 import { UserId } from '@/types/UserId';
 import PlayersWhoDidNotVote from '@/app/components/PlayersWhoDidNotVote';
@@ -18,7 +18,7 @@ import { LOCAL_STORAGE_END_TIME, LOCAL_STORAGE_PAUSE_START_TIME } from '@/consta
 export default function VoteForAccuse() {
   const nomineeId = useSelector(selectNominee);
   const nominatorId = useSelector(selectNominator);
-  const invitationCode = useSelector(selectInvitationCode);
+  const { invitationCode } = useSelector(selectUser);
   const players = useSelector(selectPlayers);
   const votes = useSelector(selectVotes);
   const spy = useSelector(selectSpy);
