@@ -42,7 +42,7 @@ export default function useGameStartSync() {
 
     return () => {
       unsubscribe();
-      void remove(gameRef);
+      // void remove(gameRef);
       dispatch(resetGame());
       dispatch(resetQuestionPhase());
     };
