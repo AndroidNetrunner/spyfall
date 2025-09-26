@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ref, onValue, remove } from 'firebase/database';
+import { ref, onValue } from 'firebase/database';
 
 import db from '../../../firebase/firebase.config';
 import { selectUser } from '@/redux/slices/userSlice';
-import { resetGame, setGame, setResultDescription } from '@/redux/slices/gameSlice';
+import { resetGame, setGame, setResultDescription, selectInvitationCode as selectGameInvitationCode } from '@/redux/slices/gameSlice';
 import { setFinalVotes } from '@/redux/slices/votePhaseSlice';
 import { resetQuestionPhase, setNominator, setNominee, setVotes } from '@/redux/slices/questionPhaseSlice';
 import isGameData from '@/validators/isGameData';
@@ -13,7 +13,7 @@ import { LOCAL_STORAGE_ID, LOCAL_STORAGE_INVITATION_CODE } from '@/constants/loc
 
 export default function useGameStartSync() {
   const { invitationCode, id } = useSelector(selectUser);
-  const [isGameStarted, setGameStarted] = useState(false);
+  const gameInvitationCode = useSelector(selectGameInvitationCode);
   if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');
   if (!id) throw new Error('유저 id가 존재하지 않음');
 
@@ -28,9 +28,8 @@ export default function useGameStartSync() {
     const unsubscribe = onValue(gameRef, snapshot => {
       const currentData = snapshot.val() as GameData;
       if (isGameData(currentData)) {
-        if (!isGameStarted) {
+        if (!gameInvitationCode) {
           dispatch(setGame(currentData));
-          setGameStarted(true);
         }
         dispatch(setVotes(currentData.votes));
         dispatch(setNominee(currentData.nominee));
@@ -42,9 +41,9 @@ export default function useGameStartSync() {
 
     return () => {
       unsubscribe();
-      void remove(gameRef);
+      // void remove(gameRef);
       dispatch(resetGame());
       dispatch(resetQuestionPhase());
     };
-  }, []);
+  }, [gameInvitationCode]);
 }
