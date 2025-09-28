@@ -10,6 +10,8 @@ import Game from './Game/Game';
 
 import { enterRoomByInvitationCode, selectUser, setUserId } from '../redux/slices/userSlice';
 import { selectInvitationCode } from '@/redux/slices/roomSlice';
+// 1. 👇 `selectPlace`를 gameSlice에서 import 합니다.
+import { selectPlace } from '@/redux/slices/gameSlice';
 
 import db from '../../firebase/firebase.config';
 import { LOCAL_STORAGE_ID, LOCAL_STORAGE_INVITATION_CODE } from '@/constants/localStorage';
@@ -18,8 +20,10 @@ import { InvitationCode } from '@/types/InvitationCode';
 
 export default function Home() {
   const dispatch = useDispatch();
-  const invitationCode = useSelector(selectInvitationCode);
   const id = useSelector(selectUser).id;
+  const invitationCode = useSelector(selectInvitationCode);
+  // 2. 👇 `place` 상태를 Redux 스토어에서 가져옵니다.
+  const place = useSelector(selectPlace);
 
   useEffect(() => {
     void fetchData();
@@ -58,9 +62,18 @@ export default function Home() {
     }
   };
 
+  // 3. 👇 여기가 핵심적인 렌더링 로직 수정 부분입니다.
   if (id) {
-    if (!invitationCode) return <Game />;
-    return <Lobby />;
+    // 게임 데이터 (`place`)가 존재하면 Game 컴포넌트를 보여줍니다.
+    if (place) {
+      return <Game />;
+    }
+    // 게임 데이터는 없지만 초대 코드 (`invitationCode`)가 있으면 Lobby를 보여줍니다.
+    if (invitationCode) {
+      return <Lobby />;
+    }
   }
+  
+  // 위 조건에 모두 해당하지 않으면 Entrance를 보여줍니다.
   return <Entrance />;
 }

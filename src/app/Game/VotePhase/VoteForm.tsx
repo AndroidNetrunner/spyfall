@@ -17,10 +17,17 @@ interface Props {
 const VoteForm = ({ votedTo, setVotedTo, setHasVote }: Props) => {
   const myUserId = useSelector(selectId);
   const invitationCode = useSelector(selectInvitationCode);
-  const opponents = Object.values(useSelector(selectPlayers)).filter((player: UserState) => player.id !== myUserId);
-  if (!myUserId) throw new Error('UserID가 존재하지 않음');
-  if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');
+  const players = useSelector(selectPlayers);
   const { handleFinalVote } = useHandler();
+  
+  if (!myUserId || !invitationCode || !players) {
+    return <p>게임 정보를 불러오는 중...</p>;
+  }
+  
+  const opponents = Object.values(players).filter((player: UserState) => player.id !== myUserId);
+  // if (!myUserId) throw new Error('UserID가 존재하지 않음');
+  // if (!invitationCode) throw new Error('초대 코드가 존재하지 않음');
+  
   const handleVoteButtonClick = async () => {
     if (votedTo) {
       try {
