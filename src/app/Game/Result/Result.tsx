@@ -8,7 +8,7 @@ import useHandler from '@/app/hooks/useHandler';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectPlace, selectResultDescription, selectSpy, setResultDescription } from '@/redux/slices/gameSlice';
-import { selectUser, setUserId } from '@/redux/slices/userSlice';
+import { enterRoomByInvitationCode, selectUser, setUserId } from '@/redux/slices/userSlice';
 
 import { RESULTS } from '@/constants/results';
 import ResetButtons from './ResetButtons';
@@ -50,6 +50,7 @@ export default function Result() {
         onReset={() => {
           dispatch(setUserId(null));
           dispatch(setResultDescription(''));
+          dispatch(enterRoomByInvitationCode(null));
         }}
         onRejoin={() => void handleRejoin(myUser)}
       />
