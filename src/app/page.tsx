@@ -9,22 +9,21 @@ import Lobby from './Lobby/Lobby';
 import Game from './Game/Game';
 
 import { enterRoomByInvitationCode, selectUser, setUserId } from '../redux/slices/userSlice';
-import { selectInvitationCode } from '@/redux/slices/roomSlice';
-// 1. 👇 `selectPlace`를 gameSlice에서 import 합니다.
 import { selectPlace } from '@/redux/slices/gameSlice';
 
 import db from '../../firebase/firebase.config';
 import { LOCAL_STORAGE_ID, LOCAL_STORAGE_INVITATION_CODE } from '@/constants/localStorage';
 import { UserId } from '@/types/UserId';
 import { InvitationCode } from '@/types/InvitationCode';
+import { selectInvitationCode } from '@/redux/slices/roomSlice';
 
 export default function Home() {
   const dispatch = useDispatch();
-  const id = useSelector(selectUser).id;
-  const invitationCode = useSelector(selectInvitationCode);
-  // 2. 👇 `place` 상태를 Redux 스토어에서 가져옵니다.
+  const {id, invitationCode: userCode} = useSelector(selectUser);
+  const roomCode = useSelector(selectInvitationCode);
   const place = useSelector(selectPlace);
 
+  // useEffect와 데이터 fetching 관련 함수들은 변경 없이 그대로 둡니다.
   useEffect(() => {
     void fetchData();
   }, []);
@@ -32,14 +31,12 @@ export default function Home() {
   const getLocalStorageData = () => {
     const storagedId = localStorage.getItem(LOCAL_STORAGE_ID) as UserId | null;
     const storagedInvitationCode = localStorage.getItem(LOCAL_STORAGE_INVITATION_CODE) as InvitationCode | null;
-
     return { storagedId, storagedInvitationCode };
   };
 
   const fetchGameFromFirebase = async (invitationCode: InvitationCode) => {
     const gameRef = ref(db, 'games/' + invitationCode);
     const snapshot = await get(gameRef);
-
     return snapshot.exists();
   };
 
@@ -55,25 +52,19 @@ export default function Home() {
 
   const fetchData = async () => {
     const { storagedId, storagedInvitationCode } = getLocalStorageData();
-
     if (storagedId && storagedInvitationCode) {
       const exists = await fetchGameFromFirebase(storagedInvitationCode);
       handleGameData(exists, storagedId, storagedInvitationCode);
     }
   };
 
-  // 3. 👇 여기가 핵심적인 렌더링 로직 수정 부분입니다.
-  if (id) {
-    // 게임 데이터 (`place`)가 존재하면 Game 컴포넌트를 보여줍니다.
-    if (place) {
-      return <Game />;
-    }
-    // 게임 데이터는 없지만 초대 코드 (`invitationCode`)가 있으면 Lobby를 보여줍니다.
-    if (invitationCode) {
-      return <Lobby />;
-    }
+  if (userCode && !roomCode) {
+    return <Game />;
   }
-  
-  // 위 조건에 모두 해당하지 않으면 Entrance를 보여줍니다.
+
+  if (id) {
+    return <Lobby />;
+  }
+
   return <Entrance />;
 }
